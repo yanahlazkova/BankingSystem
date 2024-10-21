@@ -27,6 +27,7 @@ class BankAccount:
 
 
 class SavingsAccount(BankAccount):
+    """ ощадний рахунок """
     def __init__(self, account_number, owner, interest_rate, limit_min):
         super().__init__(account_number, owner, interest_rate)
         self.__limit_min = limit_min
