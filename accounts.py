@@ -1,7 +1,11 @@
 class BankAccount:
+
     def __init__(self, account_number, owner, interest_rate):
+        # номер рахунку (унікальний)
         self.__account_number = account_number
+        # власник рахунку
         self.__owner = owner
+        # відсоткова ставка
         self.__interest_rate = interest_rate
 
     def deposit(self, amount):
