@@ -1,11 +1,59 @@
 import customtkinter as ctk
 
 
+def center_window(self, width, height):
+    """ centering window """
+    screen_width = self.winfo_screenwidth()
+    screen_height = self.winfo_screenheight()
+
+    x = (screen_width - width) // 2
+    y = (screen_height - height) // 2
+
+    self.geometry(f"{width}x{height}+{x}+{y}")
+
+class WindowClient(ctk.CTkToplevel):
+    def __init__(self):
+        super().__init__()
+        self.title("Banking System / Creating a new client...")
+
+        center_window(self, 500, 600)
+
+        # Робимо вікно модальним
+        self.grab_set()
+
+        # self.grid_rowconfigure(0, weight=1)  # configure grid system
+        self.grid_columnconfigure(0, weight=1)
+
+        self.frame_data_client = ctk.CTkFrame(self, corner_radius=5, border_width=1, border_color='green')
+        self.frame_data_client.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.name_client = ctk.CTkEntry(self.frame_data_client, placeholder_text="Введіть ім'я")
+        self.name_client.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
+
+
+
+        self.frame_buttons = ctk.CTkFrame(self, corner_radius=5, border_width=1, border_color='green')
+        self.frame_buttons.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.frame_buttons.grid_columnconfigure(0, weight=1)
+        self.frame_buttons.grid_rowconfigure(0, weight=1)
+
+        self.button_save = ctk.CTkButton(self.frame_buttons, text="Save")
+        self.button_save.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
+
+        self.button_close = ctk.CTkButton(self.frame_buttons, text="Close", fg_color='blue', command=self.destroy)
+        # self.button_close.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+
+
+
+
 class Window(ctk.CTk):
     current_theme = "green"
     current_mode = "dark"
     current_frame = None
     show_current_frame = False
+    pressed_button_menu = None
 
     def __init__(self, title):
         super().__init__()
@@ -13,7 +61,7 @@ class Window(ctk.CTk):
         self.width = 400
         self.height = 300
 
-        self.center_window(self.width, self.height)
+        center_window(self, self.width, self.height)
 
         ctk.set_default_color_theme(self.current_theme)
         ctk.set_appearance_mode(self.current_mode)
@@ -27,55 +75,67 @@ class Window(ctk.CTk):
         self.frame_clients = ctk.CTkFrame(self, corner_radius=5, border_width=1, border_color='green')
         self.frame_accounts = ctk.CTkFrame(self, corner_radius=5, border_width=1, border_color='green')
 
+    def show_frame_bank(self):
+        print(self.button_menu_bank.cget("hover_color"))
+        print(self.button_menu_bank.cget("fg_color"))
+        self.frame_bank.grid_rowconfigure(0, weight=1)
+        self.frame_bank.grid_columnconfigure(0, weight=1)
 
-    def center_window(self, width, height):
-        """ centering window """
-        screen_width = self.winfo_screenwidth()
-        screen_height = self.winfo_screenheight()
+        self.button_list_clients = ctk.CTkButton(self.frame_bank, text="Список клієнтів")
+        self.button_list_clients.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
-        x = (screen_width - width) // 2
-        y = (screen_height - height) // 2
+        self.button_list_accounts = ctk.CTkButton(self.frame_bank, text="Список рахунків")
+        self.button_list_accounts.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
 
-        self.geometry(f"{width}x{height}+{x}+{y}")
+        self.button_add_new_client = ctk.CTkButton(self.frame_bank, text="Add new client", command=self.add_new_client)
+        self.button_add_new_client.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+
+
+
+    def show_frame_clients(self):
+        self.button_cliens = ctk.CTkButton(self.frame_clients, text="Clients")
+        self.button_cliens.grid(row=0, column=0, padx=5, pady=5)
+
+    def show_frame_accounts(self):
+        self.button_accounts = ctk.CTkButton(self.frame_accounts, text="Accounts")
+        self.button_accounts.grid(row=0, column=0, padx=5, pady=5)
+
+
 
     def create_button_menu(self):
         self.frame_menu = ctk.CTkFrame(self, height=30, corner_radius=5, border_width=1, border_color='green')
         self.frame_menu.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
-        self.button_1 = ctk.CTkButton(self.frame_menu, text="Bank", width=80, command=self.show_frame_bank)
-        self.button_1.grid(row=0, column=0, padx=5, pady=5)
+        self.button_menu_bank = ctk.CTkButton(self.frame_menu, text="Bank", width=80, command=lambda: self.show_frame(self.frame_bank, self.show_frame_bank, self.button_menu_bank))
+        self.button_menu_bank.grid(row=0, column=0, padx=5, pady=5)
 
-        self.button_2 = ctk.CTkButton(self.frame_menu, text="Clients", width=80, command=self.show_frame_cliens)
-        self.button_2.grid(row=0, column=1, padx=5, pady=5)
+        self.button_menu_clients = ctk.CTkButton(self.frame_menu, text="Clients", width=80, command=lambda: self.show_frame(self.frame_clients, self.show_frame_clients, self.button_menu_clients))
+        self.button_menu_clients.grid(row=0, column=1, padx=5, pady=5)
 
-        self.button_3 = ctk.CTkButton(self.frame_menu, text="Accounts", width=80, command=self.show_frame_accounts)
-        self.button_3.grid(row=0, column=2, padx=5, pady=5)
+        self.button_menu_accounts = ctk.CTkButton(self.frame_menu, text="Accounts", width=80, command=lambda: self.show_frame(self.frame_accounts, self.show_frame_accounts, self.button_menu_accounts))
+        self.button_menu_accounts.grid(row=0, column=2, padx=5, pady=5)
 
         # Обновляем размеры виджетов перед получением размеров
-        self.update()
-        print(self.frame_menu.winfo_width())
+        # self.update()
+        # print(self.frame_menu.winfo_width())
 
-    def show_frame_bank(self):
-        self.current_frame = self.frame_bank
-        self.show_current_frame = not self.show_current_frame
-        if self.show_current_frame:
-            self.frame_bank.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
-        else:
-            self.current_frame = None
-            self.frame_bank.grid_remove()
+    def show_frame(self, frame, show_frame, pressed_button):
+        if self.current_frame:
+            self.current_frame.grid_remove()
+            self.pressed_button_menu.configure(fg_color=['#2CC985', '#2FA572'])
+            if self.current_frame == frame:
+                self.current_frame = None
+                return
 
-    def show_frame_cliens(self):
-        self.show_current_frame = not self.show_current_frame
-        if self.show_current_frame:
-            self.frame_clients.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
-        else:
-            self.current_frame = None
-            self.frame_clients.grid_remove()
+        self.current_frame = frame
+        self.pressed_button_menu = pressed_button
+        self.pressed_button_menu.configure(fg_color=['#0C955A', '#106A43'])
+        frame.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+        show_frame()
 
-    def show_frame_accounts(self):
-        self.show_current_frame = not self.show_current_frame
-        if self.show_current_frame:
-            self.frame_accounts.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
-        else:
-            self.current_frame = None
-            self.frame_accounts.grid_remove()
+    """ методи меню Банк"""
+
+    def add_new_client(self):
+        window_add_client = WindowClient()
+        window_add_client.mainloop()
+
