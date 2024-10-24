@@ -1,4 +1,4 @@
-from windows import Window
+from src.windows import Window
 
 
 class App:
