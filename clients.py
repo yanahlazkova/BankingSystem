@@ -5,6 +5,11 @@ class Client:
         self.__client_id = f'500-{self.client_counter + 1}'
         self.__name = name
 
+
+    @property
+    def client_id(self):
+        return self.__client_id
+
     def create_new_account(self, account):
         """ створення нового рахунку """
         pass

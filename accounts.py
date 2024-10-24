@@ -1,12 +1,26 @@
 class BankAccount:
 
-    def __init__(self, account_number, owner, interest_rate):
+    def __init__(self, account_number, owner):
         # номер рахунку (унікальний)
         self.__account_number = account_number
+        # баланс
+        self.__balans = 0
         # власник рахунку
         self.__owner = owner
         # відсоткова ставка
-        self.__interest_rate = interest_rate
+        self.__interest_rate = 1
+
+    @property
+    def owner(self):
+        return self.__owner
+
+    @owner.setter
+    def owner(self, new_client):
+        self.__owner = new_client
+
+    @property
+    def account_number(self):
+        return self.__account_number
 
     def deposit(self, amount):
         """ метод для внесення коштів на рахунок"""
