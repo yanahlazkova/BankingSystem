@@ -54,7 +54,7 @@ class WindowCreateClient(ctk.CTkToplevel):
                                              width=300)
         self.personal_account.grid(row=1, column=0, padx=20, pady=10, sticky='nsew')
 
-        self.button_get_account = ctk.CTkButton(self.frame_data_client, text="Get account", width=100, command=self.form_new_account)
+        self.button_get_account = ctk.CTkButton(self.frame_data_client, text="Get account", width=100, command=self.generate_new_account)
         self.button_get_account.grid(row=1, column=1, padx=10, pady=10, sticky='nsew')
 
         # Фрейм з кнопками Зберегти та закрити
@@ -84,7 +84,7 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.name_client.insert(0, upper_text)
 
     @gm.check_all_fields_filled
-    def form_new_account(self):
+    def generate_new_account(self):
         """ Створення нового особового рахнутку клієнта"""
         data_part, random_part = gm.generate_unique_account_number()
         new_account = f'UA{random_part}{self.bank.mfo_bank}{data_part}'
