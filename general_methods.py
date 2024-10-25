@@ -18,6 +18,7 @@ def check_all_fields_filled(func):
         list_fields = self.list_required_fields
         for field, name in list_fields:
             if not field.get():
+                field.configure(border_color="red")
                 print(f"Field {name} is empty")
                 return
         return func(self, *args, **kwargs)
