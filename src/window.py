@@ -1,17 +1,19 @@
 import customtkinter as ctk
 import general_methods as gm
+from .window_client import WindowClient
+from .create_client import WindowCreateClient
 
 
 class Window(ctk.CTk):
     current_theme = "green"
     current_mode = "dark"
     current_frame = None
-    show_current_frame = False
     pressed_button_menu = None
 
-    def __init__(self, title):
+    def __init__(self, bank):
         super().__init__()
-        self.title(title)
+        self.__bank = bank
+        self.title("Bank System")
         self.width = 400
         self.height = 300
 
@@ -30,21 +32,25 @@ class Window(ctk.CTk):
         self.frame_accounts = ctk.CTkFrame(self, corner_radius=5, border_width=1, border_color='green')
 
     def show_frame_bank(self):
-        print(self.button_menu_bank.cget("hover_color"))
-        print(self.button_menu_bank.cget("fg_color"))
+        """ Показує фрейм з даними меню Банк """
+        # print(self.button_menu_bank.cget("hover_color"))
+        # print(self.button_menu_bank.cget("fg_color"))
         self.frame_bank.grid_rowconfigure(0, weight=1)
         self.frame_bank.grid_columnconfigure(0, weight=1)
 
         self.button_list_clients = ctk.CTkButton(self.frame_bank, text="Список клієнтів")
-        self.button_list_clients.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+        self.button_list_clients.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
         self.button_list_accounts = ctk.CTkButton(self.frame_bank, text="Список рахунків")
-        self.button_list_accounts.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+        self.button_list_accounts.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
 
         self.button_add_new_client = ctk.CTkButton(self.frame_bank, text="Add new client", command=self.add_new_client)
         self.button_add_new_client.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
 
 
+    @property
+    def bank(self):
+        return self.__bank
 
     def show_frame_clients(self):
         self.button_cliens = ctk.CTkButton(self.frame_clients, text="Clients")
@@ -90,6 +96,6 @@ class Window(ctk.CTk):
     """ методи меню Банк"""
 
     def add_new_client(self):
-        window_add_client = WindowClient()
+        window_add_client = WindowCreateClient(self.__bank)
         window_add_client.mainloop()
 
