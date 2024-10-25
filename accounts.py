@@ -46,19 +46,31 @@ class BankAccount:
 
 class SavingsAccount(BankAccount):
     """ ощадний рахунок """
-    def __init__(self, account_number, owner, interest_rate, limit_min):
-        super().__init__(account_number, owner, interest_rate)
+    __interest_rate = 5
+    __limit_min = 100
+
+    def __init__(self, account_number, owner, interest_rate=__interest_rate, limit_min=__limit_min):
+        super().__init__(account_number, owner)
         self.__limit_min = limit_min
-        self.__fixed_interest_rate = 1
+        self.__fixed_interest_rate = interest_rate
+
+    @property
+    def interest_rate(self):
+        return self.__interest_rate
+
+    @property
+    def limit_min(self):
+        return self.__limit_min
 
 
 class CreditAccount(BankAccount):
     def __init__(self, account_number, owner, interest_rate, interest_on_loan):
-        super().__init__(account_number, owner, interest_rate)
+        super().__init__(account_number, owner)
+        self.__interest_rate = interest_rate
         self.__interest_on_loan = interest_on_loan
 
 
 class DepositAccount(BankAccount):
     def __init__(self, account_number, owner, interest_rate, time_period):
-        super().__init__(account_number, owner, interest_rate)
+        super().__init__(account_number, owner)
         self.__fixed_time_period = time_period

@@ -1,10 +1,12 @@
 class Client:
-    client_counter = 0
-    __list_accounts = []
-    def __init__(self, name):
-        self.__client_id = f'500-{self.client_counter + 1}'
+    def __init__(self, name, counter_client):
+        self.__client_id = f'500-{counter_client + 1}'
         self.__name = name
+        self.__list_accounts = []
 
+    @property
+    def name(self):
+        return self.__name
 
     @property
     def client_id(self):

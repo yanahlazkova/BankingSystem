@@ -21,6 +21,8 @@ def check_all_fields_filled(func):
                 field.configure(border_color="red")
                 print(f"Field {name} is empty")
                 return
+            else:
+                field.configure(border_color=['#979DA2', '#565B5E'])
         return func(self, *args, **kwargs)
     return wrapper
 

@@ -38,7 +38,7 @@ class Window(ctk.CTk):
         self.frame_bank.grid_rowconfigure(0, weight=1)
         self.frame_bank.grid_columnconfigure(0, weight=1)
 
-        self.button_list_clients = ctk.CTkButton(self.frame_bank, text="Список клієнтів")
+        self.button_list_clients = ctk.CTkButton(self.frame_bank, text="Список клієнтів", command=self.show_list_clients)
         self.button_list_clients.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
         self.button_list_accounts = ctk.CTkButton(self.frame_bank, text="Список рахунків")
@@ -53,8 +53,8 @@ class Window(ctk.CTk):
         return self.__bank
 
     def show_frame_clients(self):
-        self.button_cliens = ctk.CTkButton(self.frame_clients, text="Clients")
-        self.button_cliens.grid(row=0, column=0, padx=5, pady=5)
+        self.button_list_cliens = ctk.CTkButton(self.frame_clients, text="List of clients", command=self.show_list_clients)
+        self.button_list_cliens.grid(row=0, column=0, padx=5, pady=5)
 
     def show_frame_accounts(self):
         self.button_accounts = ctk.CTkButton(self.frame_accounts, text="Accounts")
@@ -94,6 +94,11 @@ class Window(ctk.CTk):
         show_frame()
 
     """ методи меню Банк"""
+
+    def show_list_clients(self):
+        """ Виводить список клієнтів банку"""
+        for index, client in enumerate(self.bank.list_clients):
+            print(f'{index + 1}. {client.client_id} - {client.name}')
 
     def add_new_client(self):
         window_add_client = WindowCreateClient(self.__bank)
