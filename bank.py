@@ -1,5 +1,6 @@
 from clients import Client
-from accounts import BankAccount
+from accounts import SavingsAccount, CreditAccount, DepositAccount
+import general_methods as gm
 
 
 class Bank:
@@ -28,17 +29,18 @@ class Bank:
     def list_accounts(self, new_account):
         self.__list_accounts.append(new_account)
 
-    def create_new_client(self, client, account):
+    def create_new_client(self, client, account_number):
         """ створення нового клієнта"""
+        new_client = Client(client, len(self.__list_clients))
+        new_account = SavingsAccount(new_client, account_number)
+        self.__list_clients.append(new_client)
+        self.__list_accounts.append(new_account)
         print('Створення ного клієнта')
-        #TODO: необхідно створити об'єкт Account
-        new_client = Client(client)
-        new_account = BankAccount(new_client, account)
-        self.__list_clients.append(new_client.client_id)
-        self.__list_accounts.append(new_account.account_number)
+        return True
 
-    def open_new_account(self):
+    def open_new_account(self, new_account):
         """ відкриття рахунку"""
+
         pass
 
     def transfer_to_account_ather_client(self):
