@@ -1,3 +1,4 @@
+# import accounts
 class Client:
     def __init__(self, name, counter_client):
         self.__client_id = f'500-{counter_client + 1}'
@@ -11,6 +12,13 @@ class Client:
     @property
     def client_id(self):
         return self.__client_id
+
+    def to_dict(self):
+        return {
+            'client_id': self.__client_id,
+            'name': self.__name,
+            'list_accounts': [account.to_dict() for account in self.__list_accounts]
+        }
 
     def create_new_account(self, account):
         """ створення нового рахунку """

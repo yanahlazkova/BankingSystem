@@ -1,5 +1,8 @@
+import json
 import random
 import datetime
+
+import accounts
 
 
 def center_window(self, width, height):
@@ -26,6 +29,7 @@ def check_all_fields_filled(func):
         return func(self, *args, **kwargs)
     return wrapper
 
+
 def generate_unique_account_number():
     """Генераці унікального номера рахунку клиента."""
     # Отримання поточної дати та часу
@@ -37,3 +41,13 @@ def generate_unique_account_number():
 
     return data_part, random_part
 
+
+def save_to_file(bank):
+    file_name = 'bank_data.json'
+    data = {
+        'accounts': [account.to_dict() for account in bank.list_accounts],
+        'clients': [client.to_dict() for client in bank.list_clients]
+    }
+
+    with open(file_name, 'w') as file:
+        json.dump(data, file, indent=4)

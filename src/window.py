@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import general_methods as gm
-from .window_client import WindowClient
+from tkinter import messagebox
 from .create_client import WindowCreateClient
 
 
@@ -18,6 +18,8 @@ class Window(ctk.CTk):
         self.height = 300
 
         gm.center_window(self, self.width, self.height)
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         ctk.set_default_color_theme(self.current_theme)
         ctk.set_appearance_mode(self.current_mode)
@@ -41,7 +43,7 @@ class Window(ctk.CTk):
         self.button_list_clients = ctk.CTkButton(self.frame_bank, text="Список клієнтів", command=self.show_list_clients)
         self.button_list_clients.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
-        self.button_list_accounts = ctk.CTkButton(self.frame_bank, text="Список рахунків")
+        self.button_list_accounts = ctk.CTkButton(self.frame_bank, text="Список рахунків", command=self.show_list_accounts)
         self.button_list_accounts.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
 
         self.button_add_new_client = ctk.CTkButton(self.frame_bank, text="Add new client", command=self.add_new_client)
@@ -52,6 +54,12 @@ class Window(ctk.CTk):
     def bank(self):
         return self.__bank
 
+    def on_closing(self):
+        if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
+            if self.bank.list_clients and self.bank.list_accounts:
+                gm.save_to_file(self.__bank)
+            self.destroy()
+
     def show_frame_clients(self):
         self.button_list_cliens = ctk.CTkButton(self.frame_clients, text="List of clients", command=self.show_list_clients)
         self.button_list_cliens.grid(row=0, column=0, padx=5, pady=5)
@@ -59,8 +67,6 @@ class Window(ctk.CTk):
     def show_frame_accounts(self):
         self.button_accounts = ctk.CTkButton(self.frame_accounts, text="Accounts")
         self.button_accounts.grid(row=0, column=0, padx=5, pady=5)
-
-
 
     def create_button_menu(self):
         self.frame_menu = ctk.CTkFrame(self, height=30, corner_radius=5, border_width=1, border_color='green')
@@ -100,7 +106,14 @@ class Window(ctk.CTk):
         for index, client in enumerate(self.bank.list_clients):
             print(f'{index + 1}. {client.client_id} - {client.name}')
 
+    def show_list_accounts(self):
+        """ Виводить список рахунків"""
+        for index, account in enumerate(self.bank.list_accounts):
+            print(f'{index + 1}. {account.account_number}')
+
     def add_new_client(self):
         window_add_client = WindowCreateClient(self.__bank)
         window_add_client.mainloop()
+
+
 

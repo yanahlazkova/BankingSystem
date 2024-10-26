@@ -160,6 +160,9 @@ class WindowCreateClient(ctk.CTkToplevel):
         new_client = self.name_client.get()
         account_number = self.personal_account.get()
         if self.bank.create_new_client(new_client, account_number):
-            self.destroy()
-            messagebox.showinfo(message="Дані збережені")
-            # self.reset_data()
+
+            if not messagebox.askokcancel('Saving', message="Дані збережені\n"
+                                                            "Додати наступного клієнта?"):
+                self.destroy()
+            else:
+                self.reset_data()

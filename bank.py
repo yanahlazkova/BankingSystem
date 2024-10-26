@@ -32,10 +32,10 @@ class Bank:
     def create_new_client(self, client, account_number):
         """ створення нового клієнта"""
         new_client = Client(client, len(self.__list_clients))
-        new_account = SavingsAccount(new_client, account_number)
+        new_account = SavingsAccount(account_number, new_client)
+        new_client.list_accounts = new_account
         self.__list_clients.append(new_client)
         self.__list_accounts.append(new_account)
-        print('Створення ного клієнта')
         return True
 
     def open_new_account(self, new_account):
