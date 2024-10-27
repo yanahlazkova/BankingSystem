@@ -144,6 +144,7 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.button_get_account.configure(fg_color='gray', state='disabled')
         self.list_required_fields.append([self.personal_account, '\"Personal account\"'])
 
+    @gm.check_all_fields_filled
     def reset_data(self):
         self.name_var.set('')
 

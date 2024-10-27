@@ -1,7 +1,10 @@
 import customtkinter as ctk
+
+import accounts
 import general_methods as gm
 from tkinter import messagebox
 from .create_client import WindowCreateClient
+from .window_list import WindowList
 
 
 class Window(ctk.CTk):
@@ -55,10 +58,11 @@ class Window(ctk.CTk):
         return self.__bank
 
     def on_closing(self):
-        if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
-            if self.bank.list_clients and self.bank.list_accounts:
-                gm.save_to_file(self.__bank)
-            self.destroy()
+        self.destroy()
+        # if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
+        #     if self.bank.list_clients and self.bank.list_accounts:
+        #         gm.save_to_file(self.__bank)
+        #     self.destroy()
 
     def show_frame_clients(self):
         self.button_list_cliens = ctk.CTkButton(self.frame_clients, text="List of clients", command=self.show_list_clients)
@@ -103,13 +107,40 @@ class Window(ctk.CTk):
 
     def show_list_clients(self):
         """ Виводить список клієнтів банку"""
-        for index, client in enumerate(self.bank.list_clients):
-            print(f'{index + 1}. {client.client_id} - {client.name}')
+        if self.bank.list_clients:
+            list_title_table = {'№п/п': 50, 'id клієнта': 100, 'ФІО': 300, 'осн.рахунок': 200}
+            list_table_clients = []
+            for index, client in enumerate(self.bank.list_clients):
+                print(list(account.account_number[account.type == 'savings'] for account in client.list_accounts))
+                print(f'{index + 1}. {client.client_id} - {client.name} - ')
+                list_table_clients.append({
+                    'id слієнта': client.client_id,
+                    'ФІО': client.name,
+                    'осн.рахунок': (account.account_number for account in client.list_accounts if account.type == 'savings')
+                })
+
+            WindowList("Список клієнтів", *list_table_clients, **list_title_table)
+
+        else:
+            messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
 
     def show_list_accounts(self):
         """ Виводить список рахунків"""
-        for index, account in enumerate(self.bank.list_accounts):
-            print(f'{index + 1}. {account.account_number}')
+        if self.bank.list_accounts:
+            list_names_column = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'власник': 300, 'баланс, грн.': 100, 'interest rate, %': 100}
+            list_table_accaunts = []
+            for index, account in enumerate(self.bank.list_accounts):
+                print(f'{index + 1}. {account.account_number}')
+                list_table_accaunts.append({
+                    '№ рахунку': account.account_number,
+                    'тип': account.type,
+                    'володар': account.owner.name,
+                    'баланс': account.balance,
+                    'interest rate': account.interest_rate
+                })
+            WindowList('Список рахунків', *list_table_accaunts, **list_names_column)
+        else:
+            messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
 
     def add_new_client(self):
         window_add_client = WindowCreateClient(self.__bank)

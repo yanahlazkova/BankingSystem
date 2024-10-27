@@ -1,10 +1,11 @@
 class BankAccount:
+    # Список полів, доступних для виводу списку рахунків
 
     def __init__(self, account_number, owner):
         # номер рахунку (унікальний)
         self.__account_number = account_number
         # баланс
-        self.__balans = 0
+        self.__balance = 0
         # власник рахунку
         self.__owner = owner
         # відсоткова ставка
@@ -23,8 +24,12 @@ class BankAccount:
         return self.__account_number
 
     @property
-    def balans(self):
-        return self.__balans
+    def balance(self):
+        return self.__balance
+
+    @balance.setter
+    def balance(self, amount):
+        self.__balance = amount
 
     def deposit(self, amount):
         """ метод для внесення коштів на рахунок"""
@@ -67,10 +72,14 @@ class SavingsAccount(BankAccount):
     def limit_min(self):
         return self.__limit_min
 
+    @property
+    def type(self):
+        return self.__type
+
     def to_dict(self):
         return {
             'account_number': self.account_number,
-            'balans': self.balans,
+            'balans': self.balance,
             'limit_min': self.__limit_min,
             'interest_rate': self.__fixed_interest_rate,
             'type': self.__type
