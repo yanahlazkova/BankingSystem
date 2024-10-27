@@ -1,7 +1,10 @@
 import customtkinter as ctk
+
+import accounts
 import general_methods as gm
 from tkinter import messagebox
 from .create_client import WindowCreateClient
+from .window_list import WindowList
 
 
 class Window(ctk.CTk):
@@ -55,10 +58,11 @@ class Window(ctk.CTk):
         return self.__bank
 
     def on_closing(self):
-        if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
-            if self.bank.list_clients and self.bank.list_accounts:
-                gm.save_to_file(self.__bank)
-            self.destroy()
+        self.destroy()
+        # if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
+        #     if self.bank.list_clients and self.bank.list_accounts:
+        #         gm.save_to_file(self.__bank)
+        #     self.destroy()
 
     def show_frame_clients(self):
         self.button_list_cliens = ctk.CTkButton(self.frame_clients, text="List of clients", command=self.show_list_clients)
@@ -108,8 +112,28 @@ class Window(ctk.CTk):
 
     def show_list_accounts(self):
         """ Виводить список рахунків"""
-        for index, account in enumerate(self.bank.list_accounts):
-            print(f'{index + 1}. {account.account_number}')
+        if self.bank.list_accounts:
+            list_setting = [
+                ['№ рахунку', 200],
+                ['тип', 80],
+                ['володар', 300],
+                ['баланс, грн.', 100],
+                ['interest rate, %', 100]
+            ]
+            list_table_accaunts = []
+            for index, account in enumerate(self.bank.list_accounts):
+                print(f'{index + 1}. {account.account_number}')
+                list_table_accaunts.append({
+                    '№ рахунку': account.account_number,
+                    'тип': account.type,
+                    'володар': account.owner.name,
+                    'баланс': account.balance,
+                    'interest rate': account.interest_rate
+                })
+            window_display_list = WindowList(list_table_accaunts, list_setting,'Список рахунків')
+            window_display_list.mainloop()
+        else:
+            messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
 
     def add_new_client(self):
         window_add_client = WindowCreateClient(self.__bank)
