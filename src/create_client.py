@@ -144,6 +144,7 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.button_get_account.configure(fg_color='gray', state='disabled')
         self.list_required_fields.append([self.personal_account, '\"Personal account\"'])
 
+    @gm.check_all_fields_filled
     def reset_data(self):
         self.name_var.set('')
 
@@ -160,6 +161,9 @@ class WindowCreateClient(ctk.CTkToplevel):
         new_client = self.name_client.get()
         account_number = self.personal_account.get()
         if self.bank.create_new_client(new_client, account_number):
-            self.destroy()
-            messagebox.showinfo(message="Дані збережені")
-            # self.reset_data()
+
+            if not messagebox.askokcancel('Saving', message="Дані збережені\n"
+                                                            "Додати наступного клієнта?"):
+                self.destroy()
+            else:
+                self.reset_data()

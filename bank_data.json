@@ -1,0 +1,46 @@
+{
+    "accounts": [
+        {
+            "account_number": "UA8430522920241026090709",
+            "balans": 0,
+            "limit_min": 100,
+            "interest_rate": 5,
+            "type": "savings"
+        },
+        {
+            "account_number": "UA9230522920241026090715",
+            "balans": 0,
+            "limit_min": 100,
+            "interest_rate": 5,
+            "type": "savings"
+        }
+    ],
+    "clients": [
+        {
+            "client_id": "500-1",
+            "name": "AGERGRRE",
+            "list_accounts": [
+                {
+                    "account_number": "UA8430522920241026090709",
+                    "balans": 0,
+                    "limit_min": 100,
+                    "interest_rate": 5,
+                    "type": "savings"
+                }
+            ]
+        },
+        {
+            "client_id": "500-2",
+            "name": "HRHDTRH",
+            "list_accounts": [
+                {
+                    "account_number": "UA9230522920241026090715",
+                    "balans": 0,
+                    "limit_min": 100,
+                    "interest_rate": 5,
+                    "type": "savings"
+                }
+            ]
+        }
+    ]
+}
