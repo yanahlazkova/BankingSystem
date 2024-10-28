@@ -5,7 +5,7 @@ class BankAccount:
         # номер рахунку (унікальний)
         self.__account_number = account_number
         # баланс
-        self.__balans = 0
+        self.__balance = 0
         # власник рахунку
         self.__owner = owner
         # відсоткова ставка
@@ -25,11 +25,11 @@ class BankAccount:
 
     @property
     def balance(self):
-        return self.__balans
+        return self.__balance
 
     @balance.setter
     def balance(self, amount):
-        self.__balans = amount
+        self.__balance = amount
 
     def deposit(self, amount):
         """ метод для внесення коштів на рахунок"""
