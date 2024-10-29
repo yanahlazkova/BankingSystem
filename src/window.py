@@ -1,10 +1,9 @@
 import customtkinter as ctk
 
-import accounts
 import general_methods as gm
 from tkinter import messagebox
 from .create_client import WindowCreateClient
-from .window_list import WindowList
+from .window_list import ListWindow
 
 
 class Window(ctk.CTk):
@@ -38,8 +37,6 @@ class Window(ctk.CTk):
 
     def show_frame_bank(self):
         """ Показує фрейм з даними меню Банк """
-        # print(self.button_menu_bank.cget("hover_color"))
-        # print(self.button_menu_bank.cget("fg_color"))
         self.frame_bank.grid_rowconfigure(0, weight=1)
         self.frame_bank.grid_columnconfigure(0, weight=1)
 
@@ -51,7 +48,6 @@ class Window(ctk.CTk):
 
         self.button_add_new_client = ctk.CTkButton(self.frame_bank, text="Add new client", command=self.add_new_client)
         self.button_add_new_client.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-
 
     @property
     def bank(self):
@@ -69,27 +65,37 @@ class Window(ctk.CTk):
         self.button_list_cliens.grid(row=0, column=0, padx=5, pady=5)
 
     def show_frame_accounts(self):
-        self.button_accounts = ctk.CTkButton(self.frame_accounts, text="Accounts")
+        self.button_accounts = ctk.CTkButton(self.frame_accounts, text="Accounts", command=self.show_list_accounts)
         self.button_accounts.grid(row=0, column=0, padx=5, pady=5)
 
     def create_button_menu(self):
         self.frame_menu = ctk.CTkFrame(self, height=30, corner_radius=5, border_width=1, border_color='green')
         self.frame_menu.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
-        self.button_menu_bank = ctk.CTkButton(self.frame_menu, text="Bank", width=80, command=lambda: self.show_frame(self.frame_bank, self.show_frame_bank, self.button_menu_bank))
+        self.button_menu_bank = ctk.CTkButton(self.frame_menu, text="Bank", width=80,
+                                              command=lambda: self.display_frame(
+                                                  self.frame_bank,
+                                                  self.show_frame_bank,
+                                                  self.button_menu_bank))
         self.button_menu_bank.grid(row=0, column=0, padx=5, pady=5)
 
-        self.button_menu_clients = ctk.CTkButton(self.frame_menu, text="Clients", width=80, command=lambda: self.show_frame(self.frame_clients, self.show_frame_clients, self.button_menu_clients))
+        self.button_menu_clients = ctk.CTkButton(self.frame_menu, text="Clients", width=80,
+                                                 command=lambda: self.display_frame(self.frame_clients,
+                                                                                    self.show_frame_clients,
+                                                                                    self.button_menu_clients))
         self.button_menu_clients.grid(row=0, column=1, padx=5, pady=5)
 
-        self.button_menu_accounts = ctk.CTkButton(self.frame_menu, text="Accounts", width=80, command=lambda: self.show_frame(self.frame_accounts, self.show_frame_accounts, self.button_menu_accounts))
+        self.button_menu_accounts = ctk.CTkButton(self.frame_menu, text="Accounts", width=80,
+                                                  command=lambda: self.display_frame(self.frame_accounts,
+                                                                                     self.show_frame_accounts,
+                                                                                     self.button_menu_accounts))
         self.button_menu_accounts.grid(row=0, column=2, padx=5, pady=5)
 
         # Обновляем размеры виджетов перед получением размеров
         # self.update()
         # print(self.frame_menu.winfo_width())
 
-    def show_frame(self, frame, show_frame, pressed_button):
+    def display_frame(self, frame, show_frame, pressed_button):
         if self.current_frame:
             self.current_frame.grid_remove()
             self.pressed_button_menu.configure(fg_color=['#2CC985', '#2FA572'])
@@ -114,11 +120,11 @@ class Window(ctk.CTk):
                 print(f'{index + 1}. {client.client_id} - {client.name} - ')
                 list_table_clients.append({
                     'id клієнта': client.client_id,
-                    'ФІО': client.name,
+                    'ПІБ': client.name,
                     'осн.рахунок': next((account.account_number for account in client.list_accounts if type(account).__name__ == 'BankAccount'), None)
                 })
 
-            WindowList("Список клієнтів", *list_table_clients, **list_title_table)
+            ListWindow("Список клієнтів", self.__bank, *list_table_clients, **list_title_table)
 
         else:
             messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
@@ -137,7 +143,7 @@ class Window(ctk.CTk):
                     'баланс': account.balance,
                     'interest rate': account.interest_rate
                 })
-            WindowList('Список рахунків', *list_table_accaunts, **list_names_column)
+            ListWindow('Список рахунків', self.__bank, *list_table_accaunts, **list_names_column)
         else:
             messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
 

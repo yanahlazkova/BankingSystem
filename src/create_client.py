@@ -4,10 +4,10 @@ from tkinter import messagebox
 
 
 class WindowCreateClient(ctk.CTkToplevel):
-    # Список полів обов'язкових для заповнення
 
     def __init__(self, bank):
         super().__init__()
+        # Список полів обов'язкових для заповнення
         self.list_required_fields = []
 
         self.bank = bank
