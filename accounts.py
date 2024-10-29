@@ -31,6 +31,14 @@ class BankAccount:
     def balance(self, amount):
         self.__balance = amount
 
+    @property
+    def interest_rate(self):
+        return self.__interest_rate
+
+    @interest_rate.setter
+    def interest_rate(self, interest_rate):
+        self.__interest_rate = interest_rate
+
     def deposit(self, amount):
         """ метод для внесення коштів на рахунок"""
         pass
