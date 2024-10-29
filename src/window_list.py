@@ -54,7 +54,8 @@ class WindowList(ctk.CTkToplevel):
                                        state='disabled',
                                        justify="center"
                                        )
-            title_table.grid(row=0, column=index, padx=5, pady=5, sticky="nsew")
+            # title_table.bind(sequence=None, command=None, add=None)
+            title_table.grid(row=0, column=index, padx=self.__padx, pady=self.__pady, sticky="nsew")
 
     def create_table(self):
         # список ширини колонок
@@ -73,7 +74,21 @@ class WindowList(ctk.CTkToplevel):
                                          state='disabled',
                                          )
                 row_table.grid(row=i+1, column=j+1, padx=5, pady=5)
+                row_table.bind("<Button-1>", lambda event, data=row: self.open_detail_window(data))
+
                 # print(f'{value}: {row[value]}')
 
-
+    def open_detail_window(self, row_data):
+        if self.title == 'Список клієнтів':
+            # open window data of client
+            pass
+        else:
+            # open window data of account
+            pass
+        # Создание нового окна для отображения информации по строке
+        detail_window = ctk.CTkToplevel(self)
+        detail_window.title("Детали строки")
+        detail_text = "\n".join(f"{key}: {value}" for key, value in row_data.items())
+        label = ctk.CTkLabel(detail_window, text=detail_text)
+        label.pack(padx=10, pady=10)
 

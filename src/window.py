@@ -113,7 +113,7 @@ class Window(ctk.CTk):
             for index, client in enumerate(self.bank.list_clients):
                 print(f'{index + 1}. {client.client_id} - {client.name} - ')
                 list_table_clients.append({
-                    'id слієнта': client.client_id,
+                    'id клієнта': client.client_id,
                     'ФІО': client.name,
                     'осн.рахунок': next((account.account_number for account in client.list_accounts if type(account).__name__ == 'BankAccount'), None)
                 })
@@ -132,7 +132,7 @@ class Window(ctk.CTk):
                 print(f'{index + 1}. {account.account_number}')
                 list_table_accaunts.append({
                     '№ рахунку': account.account_number,
-                    'тип': account.type,
+                    'тип': (account.type if type(account).__name__ != 'BankAccount' else 'Base'),
                     'володар': account.owner.name,
                     'баланс': account.balance,
                     'interest rate': account.interest_rate
