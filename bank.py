@@ -1,5 +1,5 @@
 from clients import Client
-from accounts import SavingsAccount, CreditAccount, DepositAccount
+from accounts import BankAccount, SavingsAccount, CreditAccount, DepositAccount
 import general_methods as gm
 
 
@@ -32,7 +32,7 @@ class Bank:
     def create_new_client(self, client, account_number):
         """ створення нового клієнта"""
         new_client = Client(client, len(self.__list_clients))
-        new_account = SavingsAccount(account_number, new_client)
+        new_account = BankAccount(account_number, new_client)
         new_client.list_accounts = new_account
         self.__list_clients.append(new_client)
         self.__list_accounts.append(new_account)

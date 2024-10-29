@@ -111,12 +111,11 @@ class Window(ctk.CTk):
             list_title_table = {'№п/п': 50, 'id клієнта': 100, 'ФІО': 300, 'осн.рахунок': 200}
             list_table_clients = []
             for index, client in enumerate(self.bank.list_clients):
-                print(list(account.account_number[account.type == 'savings'] for account in client.list_accounts))
                 print(f'{index + 1}. {client.client_id} - {client.name} - ')
                 list_table_clients.append({
                     'id слієнта': client.client_id,
                     'ФІО': client.name,
-                    'осн.рахунок': (account.account_number for account in client.list_accounts if account.type == 'savings')
+                    'осн.рахунок': next((account.account_number for account in client.list_accounts if type(account).__name__ == 'BankAccount'), None)
                 })
 
             WindowList("Список клієнтів", *list_table_clients, **list_title_table)
