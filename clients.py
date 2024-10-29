@@ -13,6 +13,14 @@ class Client:
     def client_id(self):
         return self.__client_id
 
+    @property
+    def list_accounts(self):
+        return (account for account in self.__list_accounts)
+
+    @list_accounts.setter
+    def list_accounts(self, new_account):
+        self.__list_accounts.append(new_account)
+
     def to_dict(self):
         return {
             'client_id': self.__client_id,
@@ -23,14 +31,6 @@ class Client:
     def create_new_account(self, account):
         """ створення нового рахунку """
         pass
-
-    @property
-    def list_accounts(self):
-        return (account for account in self.__list_accounts)
-
-    @list_accounts.setter
-    def list_accounts(self, new_account):
-        self.__list_accounts.append(new_account)
 
     # Виконання операцій з депозитами, зняттям коштів
     # та переказами між рахунками клієнта.
