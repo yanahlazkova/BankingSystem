@@ -51,3 +51,13 @@ def save_to_file(bank):
 
     with open(file_name, 'w') as file:
         json.dump(data, file, indent=4)
+
+
+def find_client_in_list(id_client, list_clients: list):
+    client = next((client for client in list_clients if client.client_id == id_client), None)
+    return client
+
+
+def find_account_in_list(class_account, list_account: list):
+    account = next((account for account in list_account if type(account).__name__ == class_account), None)
+    return account

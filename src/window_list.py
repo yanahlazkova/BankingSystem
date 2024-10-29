@@ -1,18 +1,21 @@
 import customtkinter as ctk
 import general_methods as gm
 from tkinter import messagebox
+from .client_window import ClientWindow
 
 
-class WindowList(ctk.CTkToplevel):
+class ListWindow(ctk.CTkToplevel):
     """ вікно відображення списку клієнтів або рахунків """
 
-    def __init__(self, title, *list_table, **list_names_column):
+    def __init__(self, title, bank, *list_table, **list_names_column):
         super().__init__()
         # Список назв стовбців та їх довжина
+        self.__bank = bank
         self.__list_table = list_table
         self.__list_names_column = list_names_column
         self.__padx = self.__pady = 5
         self.__list_widgets_table = []
+        self.__title = title
 
         self.title(f"Banking System / {title}")
 
@@ -61,12 +64,15 @@ class WindowList(ctk.CTkToplevel):
         # список ширини колонок
         *list_column, = (self.__list_names_column[column] for column in self.__list_names_column)
         for i, row in enumerate(self.__list_table):
+            print(*row)
             row_number_var = ctk.StringVar()
             row_number_var.set(str(i+1))
             row_number = ctk.CTkEntry(self.frame_list_accounts, textvariable=row_number_var,
                                       state='disabled', width=50)
             row_number.grid(row=i+1, column=0, padx=5, pady=5)
             for j, value in enumerate(row):
+                if j == 0:
+                    id_client = row[value]
                 row_table_var = ctk.StringVar()
                 row_table_var.set(row[value])
                 row_table = ctk.CTkEntry(self.frame_list_accounts, textvariable=row_table_var,
@@ -74,21 +80,24 @@ class WindowList(ctk.CTkToplevel):
                                          state='disabled',
                                          )
                 row_table.grid(row=i+1, column=j+1, padx=5, pady=5)
-                row_table.bind("<Button-1>", lambda event, data=row: self.open_detail_window(data))
+                row_table.bind("<Button-1>", lambda event, data=id_client: self.open_detail_window(data))
 
                 # print(f'{value}: {row[value]}')
 
-    def open_detail_window(self, row_data):
-        if self.title == 'Список клієнтів':
+    def open_detail_window(self, id_client):
+        if self.__title == 'Список клієнтів':
+            print(id_client)
             # open window data of client
-            pass
+            window_data_client = ClientWindow(self.__bank, id_client)
+            # window_data_client.mainloop()
+
         else:
             # open window data of account
             pass
         # Создание нового окна для отображения информации по строке
-        detail_window = ctk.CTkToplevel(self)
-        detail_window.title("Детали строки")
-        detail_text = "\n".join(f"{key}: {value}" for key, value in row_data.items())
-        label = ctk.CTkLabel(detail_window, text=detail_text)
-        label.pack(padx=10, pady=10)
+        # detail_window = ctk.CTkToplevel(self)
+        # detail_window.title("Детали строки")
+        # detail_text = "\n".join(f"{key}: {value}" for key, value in row_data.items())
+        # label = ctk.CTkLabel(detail_window, text=detail_text)
+        # label.pack(padx=10, pady=10)
 
