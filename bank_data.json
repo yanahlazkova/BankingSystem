@@ -5,14 +5,14 @@
             "balans": 0,
             "limit_min": 100,
             "interest_rate": 5,
-            "type": "savings"
+            "type": "main"
         },
         {
             "account_number": "UA9230522920241026090715",
             "balans": 0,
             "limit_min": 100,
             "interest_rate": 5,
-            "type": "savings"
+            "type": "main"
         }
     ],
     "clients": [
@@ -25,7 +25,7 @@
                     "balans": 0,
                     "limit_min": 100,
                     "interest_rate": 5,
-                    "type": "savings"
+                    "type": "main"
                 }
             ]
         },
@@ -38,7 +38,7 @@
                     "balans": 0,
                     "limit_min": 100,
                     "interest_rate": 5,
-                    "type": "savings"
+                    "type": "main"
                 }
             ]
         }

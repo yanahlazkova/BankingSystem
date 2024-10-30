@@ -152,4 +152,3 @@ class Window(ctk.CTk):
         window_add_client.mainloop()
 
 
-

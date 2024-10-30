@@ -51,6 +51,7 @@ def save_to_file(bank):
 
     with open(file_name, 'w') as file:
         json.dump(data, file, indent=4)
+    file.close()
 
 
 def find_client_in_list(id_client, list_clients: list):
@@ -61,3 +62,15 @@ def find_client_in_list(id_client, list_clients: list):
 def find_account_in_list(class_account, list_account: list):
     account = next((account for account in list_account if type(account).__name__ == class_account), None)
     return account
+
+
+def load_from_file_json():
+    print('Loading....')
+    file_name = 'bank_data.json'
+    with open(file_name, 'r') as file:
+        data_json = file.read()
+
+    data = json.loads(data_json)
+
+    return data
+

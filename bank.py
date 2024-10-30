@@ -4,10 +4,10 @@ import general_methods as gm
 
 
 class Bank:
-    __mfo_bank = 305229
-    __list_clients = []
-    __list_accounts = []
-
+    def __init__(self):
+        self.__mfo_bank = 305229
+        self.__list_clients = []
+        self.__list_accounts = []
 
     @property
     def mfo_bank(self):
@@ -36,7 +36,7 @@ class Bank:
         new_client.list_accounts = new_account
         self.__list_clients.append(new_client)
         self.__list_accounts.append(new_account)
-        return True
+        return True, new_client
 
     def open_new_account(self, new_account):
         """ відкриття рахунку"""
@@ -54,5 +54,26 @@ class Bank:
     def save_to_file(self):
         pass
 
-    def download_width_file(self):
-        pass
+    def download_from_file(self):
+        data_bank = gm.load_from_file_json()
+        for client in data_bank['clients']:
+            bank_account = next((account['account_number'] for account in client['list_accounts'] if account['type'] == 'main'), None)
+            *a, new_client = self.create_new_client(client['name'], bank_account)
+            if len(client['list_accounts']) > 1:
+                for account in client['list_accounts']:
+                    class_account = account['type']
+                    if class_account == 'savings':
+                        new_client.list_accounts = SavingsAccount(account['account_number'], client,
+                                                                  account['interest_rate'],
+                                                                  account['limit_min'])
+                    elif class_account == 'credit':
+                        new_client.list_accounts = CreditAccount(account['account_number'], client,
+                                                                 account['interest_rate'],
+                                                                 account['interest_on_loan'])
+                    elif class_account == 'deposit':
+                        new_client.list_accounts = DepositAccount(account['account_number'],
+                                                                  client,
+                                                                  account['interest_rate'],
+                                                                  account['time_period'])
+
+
