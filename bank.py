@@ -55,6 +55,7 @@ class Bank:
         pass
 
     def download_from_file(self):
+        #TODO: переробити завантаження з файлу, зробити без створення об'єктів
         data_bank = gm.load_from_file_json()
         for client in data_bank['clients']:
             bank_account = next((account['account_number'] for account in client['list_accounts'] if account['type'] == 'main'), None)

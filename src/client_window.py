@@ -10,7 +10,7 @@ class ClientWindow(WindowCreateClient):
         self.__id_client = id_client
 
         self.__current_client = gm.find_client_in_list(self.__id_client, bank.list_clients)
-        self.__base_account = gm.find_account_in_list('BankAccount', self.__current_client.list_accounts)
+        self.__base_account = gm.find_account_in_list('main', self.__current_client.list_accounts)
 
         self.title(f"Cabinet of client: {self.__current_client.name}")
 

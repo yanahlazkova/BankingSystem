@@ -72,7 +72,8 @@ class ListWindow(ctk.CTkToplevel):
             row_number.grid(row=i+1, column=0, padx=5, pady=5)
             for j, value in enumerate(row):
                 if j == 0:
-                    id_client = row[value]
+                    id_client = row['id клієнта']
+                # id_client = row['id клієнта']
                 row_table_var = ctk.StringVar()
                 row_table_var.set(row[value])
                 row_table = ctk.CTkEntry(self.frame_list_accounts, textvariable=row_table_var,
@@ -93,6 +94,9 @@ class ListWindow(ctk.CTkToplevel):
 
         else:
             # open window data of account
+            window_data_client = ClientWindow(self.__bank, id_client)
+            print(id_client)
+
             pass
         # Создание нового окна для отображения информации по строке
         # detail_window = ctk.CTkToplevel(self)

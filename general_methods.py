@@ -48,7 +48,6 @@ def save_to_file(bank):
         'accounts': [account.to_dict() for account in bank.list_accounts],
         'clients': [client.to_dict() for client in bank.list_clients]
     }
-
     with open(file_name, 'w') as file:
         json.dump(data, file, indent=4)
     file.close()
@@ -59,8 +58,8 @@ def find_client_in_list(id_client, list_clients: list):
     return client
 
 
-def find_account_in_list(class_account, list_account: list):
-    account = next((account for account in list_account if type(account).__name__ == class_account), None)
+def find_account_in_list(type_account, list_account: list):
+    account = next((account for account in list_account if account.type == type_account), None)
     return account
 
 

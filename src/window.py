@@ -54,11 +54,13 @@ class Window(ctk.CTk):
         return self.__bank
 
     def on_closing(self):
-        self.destroy()
         # if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
-        #     if self.bank.list_clients and self.bank.list_accounts:
+        #     if self.bank.list_clients or self.bank.list_accounts:
         #         gm.save_to_file(self.__bank)
         #     self.destroy()
+        if self.bank.list_clients or self.bank.list_accounts:
+            gm.save_to_file(self.__bank)
+        self.destroy()
 
     def show_frame_clients(self):
         self.button_list_cliens = ctk.CTkButton(self.frame_clients, text="List of clients", command=self.show_list_clients)
@@ -132,18 +134,19 @@ class Window(ctk.CTk):
     def show_list_accounts(self):
         """ Виводить список рахунків"""
         if self.bank.list_accounts:
-            list_names_column = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'власник': 300, 'баланс, грн.': 100, 'interest rate, %': 100}
-            list_table_accaunts = []
+            list_names_column = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 80, 'власник': 300, 'баланс, грн.': 100, 'interest rate, %': 100}
+            list_table_accounts = []
             for index, account in enumerate(self.bank.list_accounts):
                 print(f'{index + 1}. {account.account_number}')
-                list_table_accaunts.append({
+                list_table_accounts.append({
                     '№ рахунку': account.account_number,
-                    'тип': (account.type if type(account).__name__ != 'BankAccount' else 'Base'),
-                    'володар': account.owner.name,
+                    'тип': account.type,
+                    'id клієнта': account.owner.client_id,
+                    'власник': account.owner.name,
                     'баланс': account.balance,
                     'interest rate': account.interest_rate
                 })
-            ListWindow('Список рахунків', self.__bank, *list_table_accaunts, **list_names_column)
+            ListWindow('Список рахунків', self.__bank, *list_table_accounts, **list_names_column)
         else:
             messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
 

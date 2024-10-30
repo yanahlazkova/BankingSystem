@@ -12,6 +12,15 @@ class BankAccount:
         # відсоткова ставка
         self.__interest_rate = 1
 
+    def to_dict(self):
+        return {
+            'account_number': self.__account_number,
+            'balance': self.__balance,
+            # 'owner': self.__owner.client_id,
+            'interest_rate': self.__interest_rate,
+            'type': self.__type
+        }
+
     @property
     def owner(self):
         return self.__owner
@@ -40,6 +49,9 @@ class BankAccount:
     def interest_rate(self, interest_rate):
         self.__interest_rate = interest_rate
 
+    @property
+    def type(self):
+        return self.__type
     def deposit(self, amount):
         """ метод для внесення коштів на рахунок"""
         pass
