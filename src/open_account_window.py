@@ -4,6 +4,7 @@ import general_methods as gm
 
 class OpenAccountWindow(ctk.CTkToplevel):
     list_required_fields = []
+
     def __init__(self, client_name):
         super().__init__()
         self.title(f'Open account {client_name}')

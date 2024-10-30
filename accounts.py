@@ -1,4 +1,5 @@
 class BankAccount:
+    __type = 'main'
     # Список полів, доступних для виводу списку рахунків
 
     def __init__(self, account_number, owner):
@@ -95,16 +96,18 @@ class SavingsAccount(BankAccount):
 
 
 class CreditAccount(BankAccount):
+    __type = 'credit'
     def __init__(self, account_number, owner, interest_rate, interest_on_loan):
         super().__init__(account_number, owner)
         self.__interest_rate = interest_rate
-        self.__interest_on_loan = interest_on_loan
+        self.__interest_on_loan = interest_on_loan # відсоток по кредиту
 
     def to_dict(self):
         pass
 
 
 class DepositAccount(BankAccount):
+    __type = 'deposit'
     def __init__(self, account_number, owner, interest_rate, time_period):
         super().__init__(account_number, owner)
         self.__interest_rate = interest_rate
