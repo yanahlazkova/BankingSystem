@@ -48,9 +48,10 @@ def save_to_file(bank):
         'accounts': [account.to_dict() for account in bank.list_accounts],
         'clients': [client.to_dict() for client in bank.list_clients]
     }
+
     with open(file_name, 'w') as file:
         json.dump(data, file, indent=4)
-    file.close()
+
 
 
 def find_client_in_list(id_client, list_clients: list):
@@ -66,10 +67,12 @@ def find_account_in_list(type_account, list_account: list):
 def load_from_file_json():
     print('Loading....')
     file_name = 'bank_data.json'
-    with open(file_name, 'r') as file:
-        data_json = file.read()
+    try:
+        with open(file_name, 'r') as file:
+            data = json.load(file)
 
-    data = json.loads(data_json)
-
-    return data
+        return data
+    except Exception as e:
+        print('File does not exist' )
+        return {}
 

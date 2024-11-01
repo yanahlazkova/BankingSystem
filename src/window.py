@@ -1,5 +1,6 @@
 import customtkinter as ctk
 
+import bank
 import general_methods as gm
 from tkinter import messagebox
 from .create_client import WindowCreateClient
@@ -54,13 +55,16 @@ class Window(ctk.CTk):
         return self.__bank
 
     def on_closing(self):
-        # if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
-        #     if self.bank.list_clients or self.bank.list_accounts:
-        #         gm.save_to_file(self.__bank)
-        #     self.destroy()
-        if self.bank.list_clients or self.bank.list_accounts:
-            gm.save_to_file(self.__bank)
-        self.destroy()
+        if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
+            if self.bank.list_clients or self.bank.list_accounts:
+                if messagebox.askokcancel('Save to file', 'Зберегти дані?'):
+                    # gm.save_to_file(self.__bank)
+                    self.__bank.save_to_file()
+
+            self.destroy()
+        # if self.bank.list_clients or self.bank.list_accounts:
+        #     gm.save_to_file(self.__bank)
+        # self.destroy()
 
     def show_frame_clients(self):
         self.button_list_cliens = ctk.CTkButton(self.frame_clients, text="List of clients", command=self.show_list_clients)
