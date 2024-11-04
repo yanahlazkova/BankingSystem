@@ -19,13 +19,15 @@ def center_window(self, width, height):
 def check_all_fields_filled(func):
     def wrapper(self, *args, **kwargs):
         list_fields = self.list_required_fields
+        count_empty_fields = 0
         for field, name in list_fields:
             if not field.get():
                 field.configure(border_color="red")
-                print(f"Field {name} is empty")
-                return
-            else:
-                field.configure(border_color=['#979DA2', '#565B5E'])
+                count_empty_fields += 1
+        if count_empty_fields:
+            return
+        # else:
+        #     field.configure(border_color=['#979DA2', '#565B5E'])
         return func(self, *args, **kwargs)
     return wrapper
 

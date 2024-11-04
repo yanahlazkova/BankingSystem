@@ -1,5 +1,10 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class BankAccount:
     __type = 'main'
+
     # Список полів, доступних для виводу списку рахунків
 
     def __init__(self, account_number, owner):
@@ -52,6 +57,7 @@ class BankAccount:
     @property
     def type(self):
         return self.__type
+
     def deposit(self, amount):
         """ метод для внесення коштів на рахунок"""
         pass
@@ -80,7 +86,7 @@ class SavingsAccount(BankAccount):
     __limit_min = 100
     __type = 'savings'
 
-    def __init__(self, account_number, owner, interest_rate, limit_min=__limit_min):
+    def __init__(self, account_number, owner, interest_rate=__interest_rate, limit_min=__limit_min):
         super().__init__(account_number, owner)
         self.__limit_min = limit_min
         self.__fixed_interest_rate = interest_rate
@@ -109,10 +115,11 @@ class SavingsAccount(BankAccount):
 
 class CreditAccount(BankAccount):
     __type = 'credit'
+
     def __init__(self, account_number, owner, interest_rate, interest_on_loan):
         super().__init__(account_number, owner)
         self.__interest_rate = interest_rate
-        self.__interest_on_loan = interest_on_loan # відсоток по кредиту
+        self.__interest_on_loan = interest_on_loan  # відсоток по кредиту
 
     def to_dict(self):
         pass
@@ -120,7 +127,9 @@ class CreditAccount(BankAccount):
 
 class DepositAccount(BankAccount):
     __type = 'deposit'
-    def __init__(self, account_number, owner, interest_rate, time_period):
+    __time_period = 1
+
+    def __init__(self, account_number, owner, interest_rate, time_period=__time_period):
         super().__init__(account_number, owner)
         self.__interest_rate = interest_rate
         self.__fixed_time_period = time_period

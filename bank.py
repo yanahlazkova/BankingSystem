@@ -3,7 +3,6 @@ import json
 from clients import Client
 from accounts import BankAccount, SavingsAccount, CreditAccount, DepositAccount
 import general_methods as gm
-from pydantic import BaseModel
 
 
 class Bank:
@@ -32,16 +31,16 @@ class Bank:
     def list_accounts(self, new_account):
         self.__list_accounts.append(new_account)
 
-    def create_new_client(self, client, account_number):
+    def create_new_client(self, client, primary_account):
         """ створення нового клієнта"""
-        new_client = Client(client, len(self.__list_clients))
-        new_account = BankAccount(account_number, new_client)
+        new_client = Client(client, len(self.__list_clients), primary_account)
+        new_account = SavingsAccount(primary_account, new_client)
         new_client.primary_account = new_account
-        json_data = new_client.json()
-        print('json_data', json_data)
+        # json_data = new_client.json()
+        # print('json_data', json_data)
         self.__list_clients.append(new_client)
         self.__list_accounts.append(new_account)
-        return True, new_client
+        return new_client
 
     def open_new_account(self, new_account):
         """ відкриття рахунку"""
@@ -68,37 +67,38 @@ class Bank:
             json.dump(data, f, indent=4)
 
     def load_from_file(self):
-        # data_bank = gm.load_from_file_json()
         print('Loading....')
         file_name = 'bank_data.json'
         try:
-            with open(file_name, 'r') as file:
+            with open(file_name) as file:
                 data = json.load(file)
-
-            return data
+            if data:
+                for client in data['clients']:
+                    new_client = self.create_new_client(client['name'],
+                                                        client['primary_account'])
+                    if client['list_accounts']:
+                        for account in client['list_accounts']:
+                            self.create_account_from_data_file(new_client, **account)
+                for account in data["accounts"]:
+                    new_client = gm.find_client_in_list(account['client_id'], self.__list_clients)
+                    self.create_account_from_data_file(new_client, **account)
         except Exception as e:
-            print('File does not exist')
+            print('File does not exist', e)
 
-        # if not data_bank:
-        #     return
-        # for client in data_bank['clients']:
-        #     bank_account = next((account['account_number'] for account in client['list_accounts'] if account['type'] == 'main'), None)
-        #     *a, new_client = self.create_new_client(client['name'], bank_account)
-        #     if len(client['list_accounts']) > 1:
-        #         for account in client['list_accounts']:
-        #             class_account = account['type']
-        #             if class_account == 'savings':
-        #                 new_client.list_accounts = SavingsAccount(account['account_number'], client,
-        #                                                           account['interest_rate'],
-        #                                                           account['limit_min'])
-        #             elif class_account == 'credit':
-        #                 new_client.list_accounts = CreditAccount(account['account_number'], client,
-        #                                                          account['interest_rate'],
-        #                                                          account['interest_on_loan'])
-        #             elif class_account == 'deposit':
-        #                 new_client.list_accounts = DepositAccount(account['account_number'],
-        #                                                           client,
-        #                                                           account['interest_rate'],
-        #                                                           account['time_period'])
+    def create_account_from_data_file(self, client, **account):
 
+        if account['type'] == 'savings':
+            client.list_accounts = SavingsAccount(account['account_number'], client,
+                                                  account['interest_rate'],
+                                                  account['limit_min'],
+                                                  )
+        elif account['type'] == 'credit':
+            client.list_accounts = CreditAccount(account['account_number'], client,
+                                                     account['interest_rate'],
+                                                     account['interest_on_loan'])
+        elif account['type'] == 'deposit':
+            client.list_accounts = DepositAccount(account['account_number'],
+                                                      client,
+                                                      account['interest_rate'],
+                                                      account['time_period'])
 
