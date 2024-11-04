@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 
-class Client(BaseModel):
-    def __init__(self, name, counter_client):
-        # super().__init__()
-        self.__primary_account = None
+@dataclass
+class Client:
+    def __init__(self, name, counter_client, primary_account):
+        self.__primary_account = primary_account
         self.__client_id = f'500-{counter_client + 1}'
         self.__name = name
         self.__list_accounts = []
@@ -40,7 +40,7 @@ class Client(BaseModel):
             'list_accounts': [account.to_dict() for account in self.__list_accounts]
         }
 
-    def create_new_account(self, account):
+    def add_new_account(self, account):
         """ створення нового рахунку """
         pass
 

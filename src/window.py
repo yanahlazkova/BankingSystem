@@ -121,16 +121,16 @@ class Window(ctk.CTk):
         """ Виводить список клієнтів банку"""
         if self.bank.list_clients:
             list_title_table = {'№п/п': 50, 'id клієнта': 100, 'ФІО': 300, 'осн.рахунок': 200}
-            list_table_clients = []
+            list_clients = []
             for index, client in enumerate(self.bank.list_clients):
                 print(f'{index + 1}. {client.client_id} - {client.name} - ')
-                list_table_clients.append({
+                list_clients.append({
                     'id клієнта': client.client_id,
                     'ПІБ': client.name,
-                    'осн.рахунок': next((account.account_number for account in client.list_accounts if type(account).__name__ == 'BankAccount'), None)
+                    'осн.рахунок': client.primary_account.account_number
                 })
 
-            ListWindow("Список клієнтів", self.__bank, *list_table_clients, **list_title_table)
+            ListWindow("Список клієнтів", self.__bank, *list_clients, **list_title_table)
 
         else:
             messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
@@ -139,10 +139,10 @@ class Window(ctk.CTk):
         """ Виводить список рахунків"""
         if self.bank.list_accounts:
             list_names_column = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 80, 'власник': 300, 'баланс, грн.': 100, 'interest rate, %': 100}
-            list_table_accounts = []
+            list_accounts = []
             for index, account in enumerate(self.bank.list_accounts):
                 print(f'{index + 1}. {account.account_number}')
-                list_table_accounts.append({
+                list_accounts.append({
                     '№ рахунку': account.account_number,
                     'тип': account.type,
                     'id клієнта': account.owner.client_id,
@@ -150,7 +150,7 @@ class Window(ctk.CTk):
                     'баланс': account.balance,
                     'interest rate': account.interest_rate
                 })
-            ListWindow('Список рахунків', self.__bank, *list_table_accounts, **list_names_column)
+            ListWindow('Список рахунків', self.__bank, *list_accounts, **list_names_column)
         else:
             messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
 

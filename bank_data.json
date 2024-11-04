@@ -2,75 +2,91 @@
     "accounts": [
         {
             "account_number": "UA8430522920241026090709",
+            "client_id": "500-1",
             "balance": 0,
             "interest_rate": 1,
-            "type": "main"
+            "limit_min": 100,
+            "type": "savings"
         },
         {
             "account_number": "UA9230522920241026090715",
+            "client_id": "500-2",
             "balance": 0,
             "interest_rate": 1,
-            "type": "main"
+            "limit_min": 100,
+            "type": "savings"
         },
         {
             "account_number": "UA5430522920241030153701",
+            "client_id": "500-3",
             "balance": 0,
             "interest_rate": 1,
-            "type": "main"
+            "limit_min": 100,
+            "type": "savings"
         },
         {
             "account_number": "UA5130522920241030170743",
+            "client_id": "500-4",
             "balance": 0,
             "interest_rate": 1,
-            "type": "main"
+            "limit_min": 100,
+            "type": "savings"
         }
     ],
     "clients": [
         {
             "client_id": "500-1",
             "name": "AGERGRRE",
+            "primary_account": "UA8430522920241026090709",
             "list_accounts": [
                 {
                     "account_number": "UA8430522920241026090709",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "main"
+                    "type": "savings",
+                    "limit_min": 100
                 }
             ]
         },
         {
             "client_id": "500-2",
             "name": "HRHDTRH",
+            "primary_account": "UA9230522920241026090715",
             "list_accounts": [
                 {
                     "account_number": "UA9230522920241026090715",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "main"
+                    "type": "savings",
+                    "limit_min": 100
                 }
             ]
         },
         {
             "client_id": "500-3",
             "name": "\u0406\u0412\u0410\u041d\u041e\u0412 \u0406\u0412\u0410\u041d \u0406\u0412\u0410\u041d\u041e\u0412\u0418\u0427",
+            "primary_account": "UA5430522920241030153701",
             "list_accounts": [
                 {
                     "account_number": "UA5430522920241030153701",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "main"
+                    "type": "savings",
+                    "limit_min": 100
                 }
             ]
         },
         {
             "client_id": "500-4",
             "name": "\u041f\u0415\u0422\u0420\u041e\u0412 \u041f\u0415\u0422\u0420\u041e \u041f\u0415\u0422\u0420\u041e\u0412\u0418\u0427",
+            "primary_account": "UA5130522920241030170743",
             "list_accounts": [
                 {
                     "account_number": "UA5130522920241030170743",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "main"
+                    "type": "main",
+                    "limit_min": 100
                 }
             ]
         }

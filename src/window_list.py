@@ -81,27 +81,20 @@ class ListWindow(ctk.CTkToplevel):
                                          state='disabled',
                                          )
                 row_table.grid(row=i+1, column=j+1, padx=5, pady=5)
-                row_table.bind("<Button-1>", lambda event, data=id_client: self.open_detail_window(data))
+                row_table.bind("<Button-1>", lambda event, data=id_client: self.open_client_window(data))
 
                 # print(f'{value}: {row[value]}')
 
-    def open_detail_window(self, id_client):
-        if self.__title == 'Список клієнтів':
-            print(id_client)
-            # open window data of client
-            window_data_client = ClientWindow(self.__bank, id_client)
-            # window_data_client.mainloop()
+    def open_client_window(self, id_client):
+        client = gm.find_client_in_list(id_client, self.__bank.list_clients)
+        # open window data of client
+        window_data_client = ClientWindow(self.__bank, client, self.update_table)
 
-        else:
-            # open window data of account
-            window_data_client = ClientWindow(self.__bank, id_client)
-            print(id_client)
+    def update_table(self):
+        print('update...')
+        for widget in self.frame_list_accounts.winfo_children():
+            widget.destroy()
 
-            pass
-        # Создание нового окна для отображения информации по строке
-        # detail_window = ctk.CTkToplevel(self)
-        # detail_window.title("Детали строки")
-        # detail_text = "\n".join(f"{key}: {value}" for key, value in row_data.items())
-        # label = ctk.CTkLabel(detail_window, text=detail_text)
-        # label.pack(padx=10, pady=10)
+        self.create_table()
+
 

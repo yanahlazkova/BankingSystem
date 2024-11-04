@@ -5,9 +5,16 @@ import general_methods as gm
 class OpenAccountWindow(ctk.CTkToplevel):
     list_required_fields = []
 
-    def __init__(self, client_name):
+    def __init__(self, client, func_open_new_account, func_generate_number_account):
         super().__init__()
-        self.title(f'Open account {client_name}')
+        self.func_generate_number_account = func_generate_number_account
+        self.func_open_new_account = func_open_new_account
+        self.client = client
+        # поля, обов'язкові для заповнення
+        self.list_required_fields = []
+        self.selected_type_account = 0
+
+        self.title(f'Open account {client.name}')
 
         gm.center_window(self, 400, 300)
 
@@ -32,7 +39,7 @@ class OpenAccountWindow(ctk.CTkToplevel):
                                                 text_color='gray',
                                                 # text_color_disabled='green',
                                                 variable=self.radio_var,
-                                                command=self.show_frame_savings,
+                                                command=self.show_frame,
                                                 value=1)
         self.radiobutton_2 = ctk.CTkRadioButton(self, text="Credit account",
                                                 radiobutton_width=15,
@@ -41,7 +48,7 @@ class OpenAccountWindow(ctk.CTkToplevel):
                                                 text_color='gray',
                                                 # text_color_disabled='green',
                                                 variable=self.radio_var,
-                                                command=self.show_frame_credit,
+                                                command=self.show_frame,
                                                 value=2)
         self.radiobutton_3 = ctk.CTkRadioButton(self, text="Deposit account",
                                                 radiobutton_width=15,
@@ -50,21 +57,22 @@ class OpenAccountWindow(ctk.CTkToplevel):
                                                 text_color='gray',
                                                 # text_color_disabled='green',
                                                 variable=self.radio_var,
-                                                command=self.show_frame_deposit,
+                                                command=self.show_frame,
                                                 value=3)
 
         self.radiobutton_1.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
         self.radiobutton_2.grid(row=0, column=1, padx=10, pady=10, sticky='nsew')
         self.radiobutton_3.grid(row=0, column=2, padx=10, pady=10, sticky='nsew')
 
+        # Frame Savings account
         self.frame_savings_account = ctk.CTkFrame(self, border_color='green',
                                                   border_width=1)
-
-
-    def show_frame_savings(self):
-        # Frame Savings account
-        self.frame_savings_account.grid_rowconfigure(0, weight=1)
+        # self.frame_savings_account.grid_rowconfigure(0, weight=1)
         self.frame_savings_account.grid_columnconfigure(0, weight=1)
+
+        self.frame_savings_account.grid_columnconfigure(0, weight=1)
+        self.frame_savings_account.grid_columnconfigure(1, weight=1)
+        self.frame_savings_account.grid_columnconfigure(2, weight=1)
 
         self.interest_rate_var = ctk.StringVar()
         self.entry_interest_rate = ctk.CTkEntry(self.frame_savings_account,
@@ -89,64 +97,103 @@ class OpenAccountWindow(ctk.CTkToplevel):
                                             text_color='gray',
                                             text='UAH, - мінімальна залишкова межа')
 
+        self.entry_interest_on_loan_var = ctk.StringVar()
+        self.entry_interest_on_loan = ctk.CTkEntry(self.frame_savings_account,
+                                                   text_color='gray',
+                                                   placeholder_text_color='gray',
+                                                   placeholder_text='0.00',
+                                                   justify='right')
+
+        self.label_interest_on_loan = ctk.CTkLabel(self.frame_savings_account,
+                                                   text_color='gray',
+                                                   text='%, - відсоток по кредиту')
+
+        self.entry_time_period_var = ctk.StringVar()
+        self.entry_time_period = ctk.CTkEntry(self.frame_savings_account,
+                                              text_color='gray',
+                                              placeholder_text_color='gray',
+                                              placeholder_text='1',
+                                              justify='right')
+
+        self.label_time_period = ctk.CTkLabel(self.frame_savings_account,
+                                              text_color='gray',
+                                              text='місяців, - період часу')
+
+        self.frame_button = ctk.CTkFrame(self, border_color='green', border_width=1)
+        self.frame_button.grid(row=2, column=0, padx=10, pady=10, columnspan=3, sticky='snwe')
+
+        self.frame_button.grid_columnconfigure(0, weight=1)
+        self.frame_button.grid_columnconfigure(1, weight=1)
+        self.frame_button.grid_columnconfigure(2, weight=1)
+
+        self.button_reset = ctk.CTkButton(self.frame_button, text="Reset", state='disabled',
+                                          command=self.destroy)
+        self.button_save = ctk.CTkButton(self.frame_button, text='Save', state='disabled',
+                                         command=self.add_account)
+        self.button_close = ctk.CTkButton(self.frame_button, text='Close',
+                                          command=self.destroy)
+
+        self.button_reset.grid(row=0, column=0, padx=10, pady=10, sticky='nswe')
+        self.button_close.grid(row=0, column=1, padx=10, pady=10, sticky='nswe')
+        self.button_save.grid(row=0, column=2, padx=10, pady=10, sticky='nswe')
+
+    def show_frame(self):
+        self.button_save.configure(state='normal')
+
         self.frame_savings_account.grid(row=1, column=0, padx=10, pady=10, columnspan=3, sticky='snwe')
+
         self.entry_interest_rate.grid(row=0, column=0, padx=10, pady=10, sticky='nswe')
-        self.label_interest_rate.grid(row=0, column=1, padx=10, pady=10, sticky='nswe')
-        self.entry_limit_min.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
-        self.label_limit_min.grid(row=1, column=1, padx=10, pady=10, sticky='nsew')
+        self.label_interest_rate.grid(row=0, column=1, padx=5, pady=10, columnspan=2, sticky='wns')
 
+        # Очищаем все виджеты перед отображением нужных
+        for widget in (self.entry_limit_min, self.label_limit_min,
+                       self.entry_interest_on_loan, self.label_interest_on_loan,
+                       self.entry_time_period, self.label_time_period):
+            widget.grid_forget()
 
-    def show_frame_deposit(self):
-        # Frame Deposit account
-        self.frame_deposit_account = ctk.CTkFrame(self, border_color='green',
-                                                  border_width=1)
+        account_type = self.radio_var.get()
 
-        self.interest_rate_var = ctk.StringVar()
-        self.entry_interest_rate = ctk.CTkEntry(self.frame_deposit_account,
-                                                text_color='gray',
-                                                placeholder_text_color='gray',
-                                                placeholder_text='0.00'
-                                                )
-        self.label_interest_rate = ctk.CTkLabel(self.frame_deposit_account,
-                                                text_color='gray',
-                                                text='%, - відсоткова ставка')
+        if account_type == 1:  # Savings account
+            self.selected_type_account = 'savings'
+            self.list_required_fields = [[self.entry_interest_rate, 'відсоткова ставка'],
+                                         [self.entry_limit_min, 'min залишкова межа']]
 
-        self.time_period_var = ctk.StringVar()
-        self.entry_time_period = ctk.CTkEntry(self.frame_deposit_account,
-                                            text_color='gray',
-                                            placeholder_text_color='gray',
-                                            placeholder_text='0')
+            self.entry_limit_min.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
+            self.label_limit_min.grid(row=1, column=1, padx=5, pady=10, columnspan=2, sticky='wns')
+        elif account_type == 2:  # Credit account
+            self.selected_type_account = 'credit'
+            self.list_required_fields = [[self.entry_interest_rate, 'відсоткова ставка'],
+                                         [self.entry_interest_on_loan, 'відсоток по кредиту']]
 
-        self.label_time_period = ctk.CTkLabel(self.frame_deposit_account,
-                                            text_color='gray',
-                                            text='місяців, - період часу')
+            self.entry_interest_on_loan.grid(row=2, column=0, padx=10, pady=10, sticky='nsew')
+            self.label_interest_on_loan.grid(row=2, column=1, padx=5, pady=10, columnspan=2, sticky='wns')
+        elif account_type == 3:  # Deposit account
+            self.selected_type_account = 'deposit'
+            self.list_required_fields = [[self.entry_interest_rate, 'відсоткова ставка'],
+                                         [self.entry_time_period, 'період часу (в місяцях)']]
 
-    def show_frame_credit(self):
-        # Frame Savings account
-        self.frame_savings_account = ctk.CTkFrame(self, border_color='green',
-                                                  border_width=1)
-
-        self.interest_rate_var = ctk.StringVar()
-        self.entry_interest_rate = ctk.CTkEntry(self.frame_savings_account,
-                                                text_color='gray',
-                                                placeholder_text_color='gray',
-                                                placeholder_text='0'
-                                                )
-        self.label_interest_rate = ctk.CTkLabel(self.frame_savings_account,
-                                                text_color='gray',
-                                                text='%, - фіксована відсоткова ставка')
-
-        self.limit_min_var = ctk.StringVar()
-        self.entry_limit_min = ctk.CTkEntry(self.frame_savings_account,
-                                            text_color='gray',
-                                            placeholder_text_color='gray',
-                                            placeholder_text='0.00')
-
-        self.label_limit_min = ctk.CTkLabel(self.frame_savings_account,
-                                            text_color='gray',
-                                            text='UAH, - мінімальна залишкова межа')
-
+            self.entry_time_period.grid(row=3, column=0, padx=10, pady=10, sticky='nsew')
+            self.label_time_period.grid(row=3, column=1, padx=5, pady=10, columnspan=2, sticky='wns')
 
     def on_closing(self):
         print('Closing')
+        self.destroy()
+
+    @gm.check_all_fields_filled
+    def add_account(self):
+        print("Opening the account...")
+        account_number = self.func_generate_number_account()
+        data_new_account = None
+        match self.selected_type_account:
+            case 'savings':
+                data_new_account = (self.entry_interest_rate.get(),
+                                    self.entry_limit_min.get())
+            case 'credit':
+                data_new_account = (self.entry_interest_rate.get(),
+                                    self.entry_interest_on_loan.get())
+            case 'deposit':
+                data_new_account = (self.entry_interest_rate.get(),
+                                    self.entry_time_period.get())
+        self.func_open_new_account(account_number, self.selected_type_account, self.client, data_new_account)
+
         self.destroy()
