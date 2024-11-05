@@ -42,10 +42,15 @@ class Bank:
         self.__list_accounts.append(new_account)
         return new_client
 
-    def open_new_account(self, new_account):
+    def open_new_account(self, account_number, type_account, client, data_account):
         """ відкриття рахунку"""
-
-        pass
+        print('bank.open_new account')
+        new_account = None
+        if type_account == 'savings':
+            interest_rate, limit_min = data_account
+            new_account = SavingsAccount(account_number, client, interest_rate, limit_min)
+        client.list_accounts = new_account
+        self.__list_accounts.append(new_account)
 
     def transfer_to_account_ather_client(self):
         """ транзакція між рахунками різних клієнтів"""
@@ -93,12 +98,17 @@ class Bank:
                                                   account['limit_min'],
                                                   )
         elif account['type'] == 'credit':
-            client.list_accounts = CreditAccount(account['account_number'], client,
-                                                     account['interest_rate'],
-                                                     account['interest_on_loan'])
+            client.list_accounts = CreditAccount(account['account_number'],
+                                                 client,
+                                                 account['interest_rate'],
+                                                 account['interest_on_loan'])
         elif account['type'] == 'deposit':
             client.list_accounts = DepositAccount(account['account_number'],
-                                                      client,
-                                                      account['interest_rate'],
-                                                      account['time_period'])
+                                                  client,
+                                                  account['interest_rate'],
+                                                  account['time_period'])
 
+    def generate_new_account_number(self):
+        data_part, random_part = gm.generate_unique_account_number()
+        new_account = f'UA{random_part}{self.mfo_bank}{data_part}'
+        return new_account

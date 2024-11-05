@@ -40,7 +40,7 @@ class Client:
             'list_accounts': [account.to_dict() for account in self.__list_accounts]
         }
 
-    def create_new_account(self, account):
+    def add_new_account(self, account):
         """ створення нового рахунку """
         pass
 

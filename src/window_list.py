@@ -88,13 +88,13 @@ class ListWindow(ctk.CTkToplevel):
     def open_client_window(self, id_client):
         client = gm.find_client_in_list(id_client, self.__bank.list_clients)
         # open window data of client
-        window_data_client = ClientWindow(self.__bank, client)
-        # window_data_client.mainloop()
+        window_data_client = ClientWindow(self.__bank, client, self.update_table)
 
-        # Создание нового окна для отображения информации по строке
-        # detail_window = ctk.CTkToplevel(self)
-        # detail_window.title("Детали строки")
-        # detail_text = "\n".join(f"{key}: {value}" for key, value in row_data.items())
-        # label = ctk.CTkLabel(detail_window, text=detail_text)
-        # label.pack(padx=10, pady=10)
+    def update_table(self):
+        print('update...')
+        for widget in self.frame_list_accounts.winfo_children():
+            widget.destroy()
+
+        self.create_table()
+
 

@@ -139,8 +139,7 @@ class WindowCreateClient(ctk.CTkToplevel):
     @gm.check_all_fields_filled
     def generate_new_account(self):
         """ Створення нового особового рахнутку клієнта"""
-        data_part, random_part = gm.generate_unique_account_number()
-        new_account = f'UA{random_part}{self.bank.mfo_bank}{data_part}'
+        new_account = gm.generate_unique_account_number()
         self.account_var.set(new_account)
         self.button_save.configure(fg_color=['#2CC985', '#2FA572'], state='normal')
         self.button_get_account.configure(fg_color='gray', state='disabled')
