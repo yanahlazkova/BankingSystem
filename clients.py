@@ -1,6 +1,10 @@
-# import accounts
+from dataclasses import dataclass
+
+
+@dataclass
 class Client:
-    def __init__(self, name, counter_client):
+    def __init__(self, name, counter_client, primary_account):
+        self.__primary_account = primary_account
         self.__client_id = f'500-{counter_client + 1}'
         self.__name = name
         self.__list_accounts = []
@@ -20,6 +24,14 @@ class Client:
     @list_accounts.setter
     def list_accounts(self, new_account):
         self.__list_accounts.append(new_account)
+
+    @property
+    def primary_account(self):
+        return self.__primary_account
+
+    @primary_account.setter
+    def primary_account(self, primary_account):
+        self.__primary_account = primary_account
 
     def to_dict(self):
         return {

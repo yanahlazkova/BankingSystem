@@ -113,12 +113,14 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.frame_buttons.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
 
         self.frame_buttons.grid_columnconfigure(0, weight=1)
+        self.frame_buttons.grid_columnconfigure(1, weight=1)
+        self.frame_buttons.grid_columnconfigure(2, weight=1)
 
         self.button_save = ctk.CTkButton(self.frame_buttons, text="Save",
                                          # fg_color=['#0C955A', '#106A43'],
                                          fg_color='gray',
                                          state='disabled',
-                                         command=self.add_new_client)
+                                         command=self.add_new_client_to_bank)
         self.button_save.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
 
         self.button_close = ctk.CTkButton(self.frame_buttons, text="Close", command=self.destroy)
@@ -157,13 +159,13 @@ class WindowCreateClient(ctk.CTkToplevel):
 
 
     @gm.check_all_fields_filled
-    def add_new_client(self):
+    def add_new_client_to_bank(self):
         new_client = self.name_client.get()
         account_number = self.personal_account.get()
-        if self.bank.create_new_client(new_client, account_number):
+        if self.bank.create_new_client(new_client, len(self.bank.list_clients), account_number):
 
-            if not messagebox.askokcancel('Saving', message="Дані збережені\n"
+            if messagebox.askokcancel('Saving', message="Дані збережені\n"
                                                             "Додати наступного клієнта?"):
-                self.destroy()
-            else:
                 self.reset_data()
+            else:
+                self.destroy()

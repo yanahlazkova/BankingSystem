@@ -5,12 +5,12 @@ from .open_account_window import OpenAccountWindow
 
 
 class ClientWindow(WindowCreateClient):
-    def __init__(self, bank, id_client):
+    def __init__(self, bank, client):
         super().__init__(bank)
-        self.__id_client = id_client
+        self.__current_client = client
+        self.__id_client = client.client_id
 
-        self.__current_client = gm.find_client_in_list(self.__id_client, bank.list_clients)
-        self.__base_account = gm.find_account_in_list('BankAccount', self.__current_client.list_accounts)
+        self.__primary_account = self.__current_client.primary_account.account_number
 
         self.title(f"Cabinet of client: {self.__current_client.name}")
 
@@ -25,7 +25,7 @@ class ClientWindow(WindowCreateClient):
 
         # Рахунки клієнта
         self.account_var = ctk.StringVar()
-        self.account_var.set(self.__base_account.account_number)
+        self.account_var.set(self.__primary_account)
         self.personal_account.configure(textvariable=self.account_var)
 
         self.button_get_account.destroy()

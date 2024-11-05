@@ -19,13 +19,15 @@ def center_window(self, width, height):
 def check_all_fields_filled(func):
     def wrapper(self, *args, **kwargs):
         list_fields = self.list_required_fields
+        count_empty_fields = 0
         for field, name in list_fields:
             if not field.get():
                 field.configure(border_color="red")
-                print(f"Field {name} is empty")
-                return
-            else:
-                field.configure(border_color=['#979DA2', '#565B5E'])
+                count_empty_fields += 1
+        if count_empty_fields:
+            return
+        # else:
+        #     field.configure(border_color=['#979DA2', '#565B5E'])
         return func(self, *args, **kwargs)
     return wrapper
 
@@ -51,7 +53,7 @@ def save_to_file(bank):
 
     with open(file_name, 'w') as file:
         json.dump(data, file, indent=4)
-    file.close()
+
 
 
 def find_client_in_list(id_client, list_clients: list):
@@ -59,18 +61,20 @@ def find_client_in_list(id_client, list_clients: list):
     return client
 
 
-def find_account_in_list(class_account, list_account: list):
-    account = next((account for account in list_account if type(account).__name__ == class_account), None)
+def find_account_in_list(type_account, list_account: list):
+    account = next((account for account in list_account if account.type == type_account), None)
     return account
 
 
 def load_from_file_json():
     print('Loading....')
     file_name = 'bank_data.json'
-    with open(file_name, 'r') as file:
-        data_json = file.read()
+    try:
+        with open(file_name, 'r') as file:
+            data = json.load(file)
 
-    data = json.loads(data_json)
-
-    return data
+        return data
+    except Exception as e:
+        print('File does not exist' )
+        return {}
 
