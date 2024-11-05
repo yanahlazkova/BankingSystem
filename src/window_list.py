@@ -15,10 +15,10 @@ class ListWindow(ctk.CTkToplevel):
         if title == "Список рахунків":
             self.__list_columns = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 80, 'власник': 300,
                              'баланс, грн.': 100, 'interest rate, %': 100}
-            self.number_table_row = len(self.__bank.list_accounts)
+            self.list_length = len(self.__bank.list_accounts)
         elif title == "Список клієнтів":
             self.__list_columns = {'№п/п': 50, 'id клієнта': 100, 'ФІО': 300, 'осн.рахунок': 200}
-            self.number_table_row = len(self.__bank.list_clients)
+            self.list_length = len(self.__bank.list_clients)
 
         self.__padx = self.__pady = 5
         self.__title = title
@@ -28,29 +28,61 @@ class ListWindow(ctk.CTkToplevel):
         width_widgets = sum(self.__list_columns[number] for number in self.__list_columns)
         number_widgets = len(self.__list_columns)
 
-        height_table = (38 * (self.number_table_row + 1)) + 20
+        # кількість строк на сторінці 10
+        self.number_row = 10
+
+        # висота табилці
+        height_table = self.get_table_height()
 
         width_window = width_widgets + number_widgets * (self.__padx * 2) + 20
-        height_window = (38 * (self.__pady * 2) + 20)
+
+        # висота вікна
+        height_window = self.get_window_height(height_table)
+
         gm.center_window(self, width_window, height_window)
 
         # Робимо вікно модальним
         self.grab_set()
 
+        # self.grid_rowconfigure(3, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
+        # Назва списку
+        self.label_table_title = ctk.CTkLabel(self, text_color='gray',
+                                              text=title,
+                                              font=ctk.CTkFont(size=16))
+        self.label_table_title.grid(row=0, column=0, padx=self.__padx, pady=self.__pady, sticky='nsew')
+
+        # заголовки колонок таблиці
+        self.frame_table_titles = ctk.CTkFrame(self, height=28)
+        self.frame_table_titles.grid(row=2, column=0, padx=self.__padx, pady=self.__pady, sticky='nsew')
+
+        self.create_table_column_names()
+
+        # строки таблиці
         self.frame_list_accounts = ctk.CTkScrollableFrame(self, corner_radius=5, border_width=1,
                                                           width=width_window,
                                                           height=height_table,
                                                           label_font=ctk.CTkFont(size=16),
                                                           label_text_color='gray',
-                                                          label_text=title)
+                                                          )
 
-        self.frame_list_accounts.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
-
-        self.create_table_column_names()
+        self.frame_list_accounts.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
 
         self.create_table()
+
+        # gm.center_window(self, width_window, height_window)
+
+
+
+    def get_table_height(self):
+        number_table_row = (self.number_row if self.list_length >= self.number_row else self.list_length)
+        table_height = ((28 + self.__padx*2) * number_table_row)
+        return table_height
+
+    def get_window_height(self, table_height):
+        window_height = table_height + 300
+        return window_height
 
     def create_table_column_names(self):
         # створити назви колонок таблиці
@@ -58,7 +90,7 @@ class ListWindow(ctk.CTkToplevel):
         for index, column_name in enumerate(self.__list_columns):
             title_table_var = ctk.StringVar()
             title_table_var.set(column_name)
-            title_table = ctk.CTkEntry(self.frame_list_accounts, corner_radius=3, border_width=0,
+            title_table = ctk.CTkEntry(self.frame_table_titles, corner_radius=3, border_width=0,
                                        width=self.__list_columns[column_name],
                                        text_color='gray',
                                        textvariable=title_table_var,
@@ -72,8 +104,9 @@ class ListWindow(ctk.CTkToplevel):
     def create_table(self):
         table = []
         if self.__title == "Список рахунків":
+            self.number_table_row = self.__bank.list_accounts
             for index, account in enumerate(self.__bank.list_accounts):
-                print(f'{index + 1}. {account.account_number}')
+                # print(f'{index + 1}. {account.account_number}')
                 table.append({
                     '№ рахунку': account.account_number,
                     'тип': account.type,
@@ -83,8 +116,9 @@ class ListWindow(ctk.CTkToplevel):
                     'interest rate': account.interest_rate
                 })
         elif self.__title == "Список клієнтів":
+            self.number_table_row = self.__bank.list_clients
             for index, client in enumerate(self.__bank.list_clients):
-                print(f'{index + 1}. {client.client_id} - {client.name} - ')
+                # print(f'{index + 1}. {client.client_id} - {client.name} - ')
                 table.append({
                     'id клієнта': client.client_id,
                     'ПІБ': client.name,
@@ -94,12 +128,12 @@ class ListWindow(ctk.CTkToplevel):
         *list_column, = (self.__list_columns[column] for column in self.__list_columns)
 
         for i, row in enumerate(table):
-            print(*row)
+            # print(*row)
             row_number_var = ctk.StringVar()
             row_number_var.set(str(i+1))
             row_number = ctk.CTkEntry(self.frame_list_accounts, textvariable=row_number_var,
                                       state='disabled', width=50)
-            row_number.grid(row=i+1, column=0, padx=5, pady=5)
+            row_number.grid(row=i, column=0, padx=5, pady=5)
             for j, value in enumerate(row):
                 if j == 0:
                     id_client = row['id клієнта']
@@ -110,7 +144,7 @@ class ListWindow(ctk.CTkToplevel):
                                          width=list_column[j + 1],
                                          state='disabled',
                                          )
-                row_table.grid(row=i+1, column=j+1, padx=5, pady=5)
+                row_table.grid(row=i, column=j+1, padx=5, pady=5)
                 row_table.bind("<Button-1>", lambda event, data=id_client: self.open_client_window(data))
 
                 # print(f'{value}: {row[value]}')
@@ -121,13 +155,19 @@ class ListWindow(ctk.CTkToplevel):
         window_data_client = ClientWindow(self.__bank, client, self.update_table)
 
     def update_table(self):
-        height_frame = self.frame_list_accounts.winfo_height()
-
         for widget in self.frame_list_accounts.winfo_children():
             widget.destroy()
+        if self.__title == "Список клієнтів":
+            self.list_length = len(self.__bank.list_clients)
+        elif self.__title == "Список рахунків":
+            self.list_length = len(self.__bank.list_accounts)
 
-        self.frame_list_accounts.configure(height=(height_frame + 40 if self.number_table_row <= 10
-                                                   else height_frame))
+        table_height = self.get_table_height()
+        window_height = self.get_window_height(table_height)
+
+        self.geometry(f'{self.winfo_width()}x{window_height}')
+        self.frame_list_accounts.configure(height=table_height)
+        print('висота таблиці:', table_height)
         self.create_table_column_names()
 
         self.create_table()

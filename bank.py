@@ -36,8 +36,6 @@ class Bank:
         new_client = Client(client, len(self.__list_clients), primary_account)
         new_account = SavingsAccount(primary_account, new_client)
         new_client.primary_account = new_account
-        # json_data = new_client.json()
-        # print('json_data', json_data)
         self.__list_clients.append(new_client)
         self.__list_accounts.append(new_account)
         return new_client
