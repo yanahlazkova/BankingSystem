@@ -1,7 +1,6 @@
 import customtkinter as ctk
 import general_methods as gm
 from .create_client import WindowCreateClient
-from .open_account_window import OpenAccountWindow
 
 
 class ClientWindow(WindowCreateClient):
@@ -19,29 +18,25 @@ class ClientWindow(WindowCreateClient):
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         # Вікно клієнта
-        self.text_new_client.configure(text=self.__current_client.name)
+        self.text_new_client.configure(text=f'{self.__current_client.name}\t(id-{self.__current_client.client_id})')
         self.text_generate_account.configure(text="Рахунки клієнта:")
 
-        # Ім'я клієнта
+        # Ім'я клієнта та основний рахунок
         self.name_var = ctk.StringVar()
         self.name_var.set(self.__current_client.name)
         self.name_client.configure(textvariable=self.name_var)
 
-        # Рахунки клієнта
         self.account_var = ctk.StringVar()
         self.account_var.set(self.__primary_account)
+        self.text_account.configure(text='Особовий рахунок')
         self.personal_account.configure(textvariable=self.account_var)
+        self.personal_account.grid(padx=10, columnspan=3)
+
+        self.button_get_account.destroy()
+        # Рахунки клієнта
+
 
         # Кнопки
-        self.button_get_account.destroy()
-
-        self.button_open_account = ctk.CTkButton(self.frame_generate_account,
-                                                 text="Open new account",
-                                                 width=100,
-                                                 command=self.open_new_account)
-
-        self.button_open_account.grid(row=4, column=0, padx=10, pady=10, columnspan=3)
-
         self.button_close.configure(command=self.on_closing)
 
     def on_closing(self):
@@ -49,12 +44,5 @@ class ClientWindow(WindowCreateClient):
         self.func_update_table()
         self.destroy()
 
-    def open_new_account(self):
-        # open new window for opening of account
-        print('Open new account')
-        window_open_account = OpenAccountWindow(self.__current_client,
-                                                self.bank.open_new_account,
-                                                self.bank.generate_new_account_number)
-        window_open_account.mainloop()
 
 
