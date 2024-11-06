@@ -140,7 +140,8 @@ class WindowCreateClient(ctk.CTkToplevel):
     @gm.check_all_fields_filled
     def generate_new_account(self):
         """ Створення нового особового рахнутку клієнта"""
-        new_account = gm.generate_unique_account_number()
+
+        new_account = gm.generate_unique_account_number(self.bank.mfo_bank)
         self.__current_client = Client(self.name_var.get(), len(self.bank.list_clients),
                                        self.account_var.get())
 

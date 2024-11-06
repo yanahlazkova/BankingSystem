@@ -32,7 +32,7 @@ def check_all_fields_filled(func):
     return wrapper
 
 
-def generate_unique_account_number():
+def generate_unique_account_number(mfo_bank):
     """Генераці унікального номера рахунку клиента."""
     # Отримання поточної дати та часу
     data = datetime.datetime.now()
@@ -41,7 +41,7 @@ def generate_unique_account_number():
     # Генеруємо випадкову частину номера
     random_part = random.randint(10, 99)
 
-    return data_part, random_part
+    return f'UA{random_part}{mfo_bank}{data_part}'
 
 
 def save_to_file(bank):
