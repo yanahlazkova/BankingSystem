@@ -33,12 +33,10 @@ class Bank:
 
     def create_new_client(self, client, primary_account):
         """ створення нового клієнта"""
-        new_client = Client(client, len(self.__list_clients), primary_account)
-        new_account = SavingsAccount(primary_account, new_client)
-        new_client.primary_account = new_account
-        self.__list_clients.append(new_client)
+        new_account = SavingsAccount(primary_account, client)
+        self.__list_clients.append(client)
         self.__list_accounts.append(new_account)
-        return new_client
+        return True
 
     def open_new_account(self, account_number, type_account, client, data_account):
         """ відкриття рахунку"""
