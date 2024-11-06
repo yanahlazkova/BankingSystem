@@ -31,11 +31,17 @@ class Bank:
     def list_accounts(self, new_account):
         self.__list_accounts.append(new_account)
 
-    def create_new_client(self, client, primary_account):
+    def create_new_client(self, client_name, primary_account):
         """ створення нового клієнта"""
-        new_account = SavingsAccount(primary_account, client)
+        new_client = Client(client_name, len(self.__list_clients), primary_account)
+        new_account = SavingsAccount(primary_account, new_client)
+        new_client.primary_account = new_account
+        return new_client, new_account
+
+    def add_new_client_to_bank(self, client, account):
+        """ додавання нового у список клієнтів банка """
         self.__list_clients.append(client)
-        self.__list_accounts.append(new_account)
+        self.__list_accounts.append(account)
         return True
 
     def open_new_account(self, account_number, type_account, client, data_account):
@@ -75,8 +81,9 @@ class Bank:
                 data = json.load(file)
             if data:
                 for client in data['clients']:
-                    new_client = self.create_new_client(client['name'],
-                                                        client['primary_account'])
+                    new_client, primary_account = self.create_new_client(client['name'],
+                                                                         client['primary_account'])
+                    self.add_new_client_to_bank(new_client, primary_account)
                     if client['list_accounts']:
                         for account in client['list_accounts']:
                             self.create_account_from_data_file(new_client, **account)
@@ -105,6 +112,5 @@ class Bank:
                                                   account['time_period'])
 
     def generate_new_account_number(self):
-        data_part, random_part = gm.generate_unique_account_number()
-        new_account = f'UA{random_part}{self.mfo_bank}{data_part}'
-        return new_account
+        new_number_account = gm.generate_unique_account_number(self.mfo_bank)
+        return new_number_account

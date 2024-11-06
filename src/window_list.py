@@ -152,7 +152,7 @@ class ListWindow(ctk.CTkToplevel):
     def open_client_window(self, id_client):
         client = gm.find_client_in_list(id_client, self.__bank.list_clients)
         # open window data of client
-        window_data_client = ClientWindow(self.__bank, client, self.update_table)
+        ClientWindow(self, self.__bank, client)
 
     def update_table(self):
         for widget in self.frame_list_accounts.winfo_children():

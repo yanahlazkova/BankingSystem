@@ -24,15 +24,15 @@ def check_all_fields_filled(func):
             if not field.get():
                 field.configure(border_color="red")
                 count_empty_fields += 1
+            else:
+                field.configure(border_color=['#979DA2', '#565B5E'])
         if count_empty_fields:
             return
-        # else:
-        #     field.configure(border_color=['#979DA2', '#565B5E'])
         return func(self, *args, **kwargs)
     return wrapper
 
 
-def generate_unique_account_number():
+def generate_unique_account_number(mfo_bank):
     """Генераці унікального номера рахунку клиента."""
     # Отримання поточної дати та часу
     data = datetime.datetime.now()
@@ -41,7 +41,7 @@ def generate_unique_account_number():
     # Генеруємо випадкову частину номера
     random_part = random.randint(10, 99)
 
-    return data_part, random_part
+    return f'UA{random_part}{mfo_bank}{data_part}'
 
 
 def save_to_file(bank):
