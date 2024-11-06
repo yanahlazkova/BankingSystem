@@ -16,7 +16,7 @@ class WindowCreateClient(ctk.CTkToplevel):
 
         self.title("Banking System / Creating a new client...")
 
-        self.__current_client = None
+        self._current_client = None
 
         self.__padx = self.__pady = 10
 
@@ -119,7 +119,7 @@ class WindowCreateClient(ctk.CTkToplevel):
 
         self.button_save = ctk.CTkButton(self.frame_buttons, text="Save",
                                          # fg_color=['#0C955A', '#106A43'],
-                                         fg_color='gray',
+                                         # fg_color='gray',
                                          state='disabled',
                                          command=self.add_new_client_to_bank)
         self.button_save.grid(row=0, column=2, padx=self.__padx, pady=self.__pady, sticky="nsew")
@@ -129,6 +129,14 @@ class WindowCreateClient(ctk.CTkToplevel):
 
         self.button_reset = ctk.CTkButton(self.frame_buttons, text="Reset", command=self.reset_data)
         self.button_reset.grid(row=0, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
+
+    @property
+    def current_client(self):
+        return self._current_client
+
+    @current_client.setter
+    def current_client(self, client):
+        self._current_client = client
 
     def force_uppercase(self, event):
         """ Робить ввод символів у верхньому регістрі"""
@@ -142,46 +150,54 @@ class WindowCreateClient(ctk.CTkToplevel):
         """ Створення нового особового рахнутку клієнта"""
 
         new_account = gm.generate_unique_account_number(self.bank.mfo_bank)
-        self.__current_client = Client(self.name_var.get(), len(self.bank.list_clients),
-                                       self.account_var.get())
-
         self.account_var.set(new_account)
+
         self.button_save.configure(fg_color=['#2CC985', '#2FA572'], state='normal')
         self.button_get_account.configure(fg_color='gray', state='disabled')
-        self.list_required_fields.append([self.personal_account, '\"Personal account\"'])
+        # self.list_required_fields.append([self.personal_account, '\"Personal account\"'])
         self.button_open_account.configure(state='normal')
+        self.name_client.configure(state='disabled')
 
-    @gm.check_all_fields_filled
+
+    # @gm.check_all_fields_filled
     def reset_data(self):
+        self._current_client = None
         self.name_var.set('')
-
-        self.name_client.configure(textvariable=self.name_var)
+        self.name_client.configure(state='normal', textvariable=self.name_var)
         self.account_var.set("UA")
         self.personal_account.configure(textvariable=self.account_var)
         self.button_save.configure(fg_color=['#0C955A', '#106A43'], state='disabled')
         self.button_get_account.configure(fg_color=['#2CC985', '#2FA572'], state='normal')
-        self.list_required_fields.remove([self.personal_account, '\"Personal account\"'])
         self.button_open_account.configure(state='disabled')
+
 
 
     @gm.check_all_fields_filled
     def add_new_client_to_bank(self):
+
         new_client = self.name_client.get()
         account_number = self.personal_account.get()
-        self.__current_client = self.bank.create_new_client(self.__current_client, account_number)
-        if self.__current_client:
-
+        self._current_client, primary_account = self.bank.create_new_client(new_client, account_number)
+        if self._current_client:
+            self.bank.add_new_client_to_bank(self._current_client, primary_account)
             if messagebox.askokcancel('Saving', message="Дані збережені\n"
                                                             "Додати наступного клієнта?"):
                 self.reset_data()
             else:
                 self.destroy()
+                from src.client_window import ClientWindow
+                ClientWindow(self, self.bank, self._current_client)
 
+    @gm.check_all_fields_filled
     def open_new_account(self):
         # open new window for opening of account
         print('Open new account')
-        if self.__current_client:
-            window_open_account = OpenAccountWindow(self.__current_client,
+
+        if self._current_client:
+            window_open_account = OpenAccountWindow(self._current_client,
                                                     self.bank.open_new_account,
                                                     self.bank.generate_new_account_number)
             window_open_account.mainloop()
+
+    def update_table(self):
+        print('update у вікні клієнта')

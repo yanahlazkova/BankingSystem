@@ -24,10 +24,10 @@ def check_all_fields_filled(func):
             if not field.get():
                 field.configure(border_color="red")
                 count_empty_fields += 1
+            else:
+                field.configure(border_color=['#979DA2', '#565B5E'])
         if count_empty_fields:
             return
-        # else:
-        #     field.configure(border_color=['#979DA2', '#565B5E'])
         return func(self, *args, **kwargs)
     return wrapper
 
