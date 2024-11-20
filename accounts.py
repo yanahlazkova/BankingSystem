@@ -105,11 +105,13 @@ class SavingsAccount(BankAccount):
 
     def to_dict(self):
         return {
-            'account_number': self.account_number,
-            'balans': self.balance,
-            'limit_min': self.__limit_min,
-            'interest_rate': self.__fixed_interest_rate,
-            'type': self.__type
+            self.account_number:
+                {'account_number': self.account_number,
+                 'balans': self.balance,
+                 'limit_min': self.__limit_min,
+                 'interest_rate': self.__fixed_interest_rate,
+                 'type': self.__type
+                 }
         }
 
 

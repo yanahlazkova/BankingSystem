@@ -1,5 +1,5 @@
 import json
-
+import uuid
 from clients import Client
 from accounts import BankAccount, SavingsAccount, CreditAccount, DepositAccount
 import general_methods as gm
@@ -11,30 +11,10 @@ class Bank:
         self.__list_clients = []
         self.__list_accounts = []
 
-    @property
-    def mfo_bank(self):
-        return self.__mfo_bank
-
-    @property
-    def list_clients(self):
-        return self.__list_clients
-
-    @list_clients.setter
-    def list_clients(self, new_client):
-        self.__list_clients.append(new_client)
-
-    @property
-    def list_accounts(self):
-        return self.__list_accounts
-
-    @list_accounts.setter
-    def list_accounts(self, new_account):
-        self.__list_accounts.append(new_account)
-
-    def create_new_client(self, client_name, primary_account):
+    def create_new_client(self, client_name, primary_account_number):
         """ створення нового клієнта"""
-        new_client = Client(client_name, len(self.__list_clients), primary_account)
-        new_account = SavingsAccount(primary_account, new_client)
+        new_client = Client(client_name, str(uuid.uuid4()))
+        new_account = SavingsAccount(primary_account_number, new_client)
         new_client.primary_account = new_account
         return new_client, new_account
 
@@ -83,7 +63,7 @@ class Bank:
                 for client in data['clients']:
                     new_client, primary_account = self.create_new_client(client['name'],
                                                                          client['primary_account'])
-                    self.add_new_client_to_bank(new_client, primary_account)
+                    self.add_new_client_to_bank(new_client, new_client.primary_account)
                     if client['list_accounts']:
                         for account in client['list_accounts']:
                             self.create_account_from_data_file(new_client, **account)

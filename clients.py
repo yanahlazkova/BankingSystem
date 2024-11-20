@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 @dataclass
 class Client:
-    def __init__(self, name, counter_client, primary_account):
+    def __init__(self, name, client_id: str, primary_account=None):
         self.__primary_account = primary_account
-        self.__client_id = f'500-{counter_client + 1}'
+        self.__client_id = client_id
         self.__name = name
         self.__list_accounts = []
 
@@ -39,9 +39,12 @@ class Client:
 
     def to_dict(self):
         return {
-            'client_id': self.__client_id,
-            'name': self.__name,
-            'list_accounts': [account.to_dict() for account in self.__list_accounts]
+            self.__client_id:
+                {'client_id': self.__client_id,
+                 'name': self.__name,
+                 'primary_account': self.__primary_account,
+                 'list_accounts': [account.to_dict() for account in self.__list_accounts]
+                 }
         }
 
     def add_new_account(self, account):
