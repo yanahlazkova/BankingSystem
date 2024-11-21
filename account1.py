@@ -60,7 +60,7 @@ class SavingsAccount(BankAccount):
     __limit_min = 100
     __type = 'savings'
 
-    def __init__(self, owner_id, account_number, balance, interest_rate=__interest_rate, limit_min=__limit_min):
+    def __init__(self, account_number, owner_id, balance, interest_rate=__interest_rate, limit_min=__limit_min):
         super().__init__(owner_id, account_number, balance, interest_rate)
         self.__limit_min = limit_min
         self.__fixed_interest_rate = interest_rate
@@ -101,11 +101,12 @@ class SavingsAccount(BankAccount):
             'type': self.__type
         }
 
+
 class CreditAccount(BankAccount):
     __type = 'credit'
 
-    def __init__(self, account_number, owner, interest_rate, interest_on_loan):
-        super().__init__(account_number, owner)
+    def __init__(self, account_number, owner_id, balance, interest_rate, interest_on_loan):
+        super().__init__(account_number, owner_id)
         self.__interest_rate = interest_rate
         self.__interest_on_loan = interest_on_loan  # відсоток по кредиту
 
@@ -116,8 +117,8 @@ class DepositAccount(BankAccount):
     __type = 'deposit'
     __time_period = 1
 
-    def __init__(self, account_number, owner, interest_rate, time_period=__time_period):
-        super().__init__(account_number, owner)
+    def __init__(self, account_number, owner_id, balance, interest_rate, time_period=__time_period):
+        super().__init__(account_number, owner_id, balance)
         self.__interest_rate = interest_rate
         self.__fixed_time_period = time_period
 

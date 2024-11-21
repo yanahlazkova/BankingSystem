@@ -20,6 +20,10 @@ class Bank:
     def list_clients(self):
         return self.__list_clients
 
+    @property
+    def mfo_bank(self):
+        return self.__mfo_bank
+
     def add_new_client(self, client, number_primary_account):
         pass
 
@@ -76,8 +80,20 @@ class Bank:
         except Exception as e:
             print('Ошибка записи в файл: ', e)
 
-    def create_account(self, **data_account):
-        pass
+    def create_new_account(self, type_account, client, data_account):
+        print(data_account)
+        account_number = gm.generate_unique_account_number(self.mfo_bank)
+        new_account = None
+        match type_account:
+            case 'savings':
+                new_account = SavingsAccount(account_number, client.client_id, balance=0, **data_account)
+            case 'credit':
+                new_account = CreditAccount(account_number, client.client_id, balance=0, **data_account)
+            case 'deposit':
+                new_account = DepositAccount(account_number, client.client_id, balance=0, **data_account)
+
+
+
 
     # def load_from_file(self, file_name):
     #     """ Загрузка з файлу bank_data.json """

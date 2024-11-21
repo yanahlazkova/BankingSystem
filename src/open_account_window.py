@@ -5,11 +5,12 @@ import general_methods as gm
 class OpenAccountWindow(ctk.CTkToplevel):
     list_required_fields = []
 
-    def __init__(self, client, func_open_new_account, func_generate_number_account):
+    def __init__(self, parent, client, bank):
         super().__init__()
-        self.func_generate_number_account = func_generate_number_account
-        self.func_open_new_account = func_open_new_account
         self.client = client
+        self.__bank = bank
+        # self.func_generate_number_account = gm.generate_unique_account_number(bank.mfo_bank)
+        # self.func_open_new_account = bank.create_new_account()
         # поля, обов'язкові для заповнення
         self.list_required_fields = []
         self.selected_type_account = 0
@@ -182,7 +183,7 @@ class OpenAccountWindow(ctk.CTkToplevel):
     @gm.check_all_fields_filled
     def add_account(self):
         print("Opening the account...")
-        account_number = self.func_generate_number_account()
+        # account_number = gm.generate_unique_account_number(self.__bank.mfo_bank)
         data_new_account = None
         match self.selected_type_account:
             case 'savings':
@@ -194,6 +195,6 @@ class OpenAccountWindow(ctk.CTkToplevel):
             case 'deposit':
                 data_new_account = (self.entry_interest_rate.get(),
                                     self.entry_time_period.get())
-        self.func_open_new_account(account_number, self.selected_type_account, self.client, data_new_account)
+        self.__bank.create_new_account(self.selected_type_account, self.client, data_new_account)
 
         self.destroy()

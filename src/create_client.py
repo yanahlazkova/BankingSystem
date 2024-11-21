@@ -194,9 +194,7 @@ class WindowCreateClient(ctk.CTkToplevel):
         print('Open new account')
 
         if self._current_client:
-            window_open_account = OpenAccountWindow(self._current_client,
-                                                    self.bank.open_new_account,
-                                                    self.bank.generate_new_account_number)
+            window_open_account = OpenAccountWindow(self, self._current_client, self.bank)
             window_open_account.mainloop()
 
     def update_table(self):
