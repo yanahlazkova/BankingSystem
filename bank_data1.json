@@ -1,0 +1,70 @@
+{
+    "accounts": {
+        "UA8430522920241026090709": {
+            "account_number": "UA8430522920241026090709",
+            "client_id": "c98d6d8b-acb2-450c-bfbd-0363de8cf30a",
+            "balance": 0,
+            "limit_min": 100,
+            "interest_rate": 1,
+            "type": "savings"
+        },
+        "UA5430522920241030153701": {
+            "account_number": "UA5430522920241030153701",
+            "client_id": "3d4854fb-053e-4e34-a1c0-2d5316f3f8ce",
+            "balance": 0,
+            "limit_min": 100,
+            "interest_rate": 1,
+            "type": "savings"
+        },
+        "UA5130522920241030170743": {
+            "account_number": "UA5130522920241030170743",
+            "client_id": "d2f1c8ec-8fcc-4bf1-8470-ea8d3fb9b7ee",
+            "balance": 0,
+            "limit_min": 100,
+            "interest_rate": 1,
+            "type": "savings"
+        },
+        "UA9230522920241026090715": {
+            "account_number": "UA9230522920241026090715",
+            "client_id": "ac865ad6-0990-4d74-be9f-465db53c2a38",
+            "balance": 0,
+            "limit_min": 100,
+            "interest_rate": 1,
+            "type": "savings"
+        }
+    },
+    "clients": {
+        "c98d6d8b-acb2-450c-bfbd-0363de8cf30a": {
+            "client_id": "c98d6d8b-acb2-450c-bfbd-0363de8cf30a",
+            "name": "AGERGRRE",
+            "primary_account": "UA8430522920241026090709",
+            "list_accounts": [
+                "UA8430522920241026090709"
+            ]
+        },
+        "ac865ad6-0990-4d74-be9f-465db53c2a38": {
+            "client_id": "ac865ad6-0990-4d74-be9f-465db53c2a38",
+            "name": "HRHDTRH",
+            "primary_account": "UA9230522920241026090715",
+            "list_accounts": [
+                "UA9230522920241026090715"
+            ]
+        },
+        "3d4854fb-053e-4e34-a1c0-2d5316f3f8ce": {
+            "client_id": "3d4854fb-053e-4e34-a1c0-2d5316f3f8ce",
+            "name": "ІВАНОВ ІВАН ІВАНОВИЧ",
+            "primary_account": "UA5430522920241030153701",
+            "list_accounts": [
+                "UA5430522920241030153701"
+            ]
+        },
+        "d2f1c8ec-8fcc-4bf1-8470-ea8d3fb9b7ee": {
+            "client_id": "d2f1c8ec-8fcc-4bf1-8470-ea8d3fb9b7ee",
+            "name": "ПЕТРОВ ПЕТРО ПЕТРОВИЧ",
+            "primary_account": "UA5130522920241030170743",
+            "list_accounts": [
+                "UA5130522920241030170743"
+            ]
+        }
+    }
+}

@@ -33,17 +33,15 @@ class Client:
 
     def __repr__(self):
         list_account = '\n\t'.join(f'{index + 1}. {account}' for index, account in enumerate(self._list_accounts))
-        return f'\nID: {self.__client_id}\n\tName: {self.__name}\nAccounts:{f'\n\t{list_account}' if list_account else '\tempty'}'
+        return (f'\nID: {self.__client_id}\n\tName: {self.__name}'
+                f'\n\tPrimary_account:{self.__primary_account}\nAccounts:{f'\n\t{list_account}' if list_account else '\tempty'}')
 
     def to_dict(self):
         return {
-            self.__client_id:
-                {
-                    'client_id': self.__client_id,
-                    'name': self.__name,
-                    'primary_account': self.__primary_account,
-                    'list_accounts': [account for account in self._list_accounts]
-                }
+            'client_id': self.__client_id,
+            'name': self.__name,
+            'primary_account': self.__primary_account,
+            'list_accounts': [account for account in self._list_accounts]
         }
 
 class ClientNode:
@@ -108,4 +106,17 @@ class ClientBinaryTree:
                     self.print_tree(node.right)
         else:
             print("List of clients is EMPTY")
+
+    def to_dict(self, node=None):
+        result = {}
+        if node is None:
+            node = self.root
+        if node is not None:
+            result[node.data.client_id] = node.data.to_dict()
+            if node.left or node.right:
+                if node.left:
+                    result.update(self.to_dict(node.left))
+                if node.right:
+                    result.update(self.to_dict(node.right))
+        return result
 

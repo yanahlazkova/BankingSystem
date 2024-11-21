@@ -85,17 +85,20 @@ class SavingsAccount(BankAccount):
                 and self.limit_min == other.limit_min)
 
     def __repr__(self):
-        return f'\nAccount number: {self.account_number}:\nClient ID-{self.owner_id}'
+        return (f'\nAccount number {self.account_number}:'
+                f'\n\tClient ID-{self.owner_id}'
+                f'\n\tBalance:\t{self.balance}'
+                f'\n\tInterest rate:\t{self.interest_rate}'
+                f'\n\tLimit min:\t{self.limit_min}')
 
     def to_dict(self):
         return {
-            self.account_number:
-                {'account_number': self.account_number,
-                 'balance': self.balance,
-                 'limit_min': self.__limit_min,
-                 'interest_rate': self.__fixed_interest_rate,
-                 'type': self.__type
-                }
+            'account_number': self.account_number,
+            'client_id': self.owner_id,
+            'balance': self.balance,
+            'limit_min': self.__limit_min,
+            'interest_rate': self.__fixed_interest_rate,
+            'type': self.__type
         }
 
 class CreditAccount(BankAccount):
@@ -178,15 +181,16 @@ class AccountBinaryTree:
         else:
             print("List of accounts is EMPTY")
 
+
     def to_dict(self, node=None):
-        result = []
+        result = {}
         if node is None:
             node = self.root
         if node is not None:
-            result.append(node.data.to_dict())
+            result[node.data.account_number] = node.data.to_dict()
             if node.left or node.right:
                 if node.left:
-                    self.print_all(node.left)
+                    result.update(self.to_dict(node.left))
                 if node.right:
-                    self.print_all(node.right)
+                    result.update(self.to_dict(node.right))
         return result
