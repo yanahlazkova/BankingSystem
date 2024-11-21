@@ -181,7 +181,6 @@ class AccountBinaryTree:
         else:
             print("List of accounts is EMPTY")
 
-
     def to_dict(self, node=None):
         result = {}
         if node is None:
@@ -193,4 +192,26 @@ class AccountBinaryTree:
                     result.update(self.to_dict(node.left))
                 if node.right:
                     result.update(self.to_dict(node.right))
+        return result
+
+    def length(self):
+        return self.__len__(self.root)
+
+    def __len__(self, node):
+        if node is None:
+            return 0
+        else:
+            return 1 + self.__len__(node.left) + self.__len__(node.right)
+
+    def get_list(self, node=None):
+        result = []
+        if node is None:
+            node = self.root
+        if node is not None:
+            result.append(node.data.to_dict())
+            if node.left or node.right:
+                if node.left:
+                    result.extend(self.get_list(node.left))
+                if node.right:
+                    result.extend(self.get_list(node.right))
         return result

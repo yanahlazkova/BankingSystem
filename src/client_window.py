@@ -4,15 +4,15 @@ from .create_client import WindowCreateClient
 
 
 class ClientWindow(WindowCreateClient):
-    def __init__(self, parent, bank, client): #, func_update_table):
+    def __init__(self, parent, bank, client_id): #, func_update_table):
         super().__init__(bank)
         # self.func_update_table = func_update_table
         self.parent_window = parent
         print('parent', type(parent).__name__)
         self.bank = bank
-        self._current_client = client
+        self._current_client = self.bank.list_clients.find_by_id(client_id)
 
-        self.__primary_account = self._current_client.primary_account.account_number
+        self.__primary_account = self._current_client.primary_account
 
         self.title(f"Cabinet of client: {self._current_client.name}")
 

@@ -56,7 +56,7 @@ class Window(ctk.CTk):
 
     def on_closing(self):
         if messagebox.askokcancel("Вихід", "Вийти з додатку?"):
-            if self.bank.list_clients or self.bank.list_accounts:
+            if self.bank.list_clients.length() or self.bank.list_accounts.length():
                 if messagebox.askokcancel('Save to file', 'Зберегти дані?'):
                     # gm.save_to_file(self.__bank)
                     self.__bank.save_to_file()
@@ -119,7 +119,7 @@ class Window(ctk.CTk):
 
     def show_list_clients(self):
         """ Виводить список клієнтів банку"""
-        if self.bank.list_clients:
+        if self.bank.list_clients.length():
             # list_title_table = {'№п/п': 50, 'id клієнта': 100, 'ФІО': 300, 'осн.рахунок': 200}
             # list_clients = []
             # for index, client in enumerate(self.bank.list_clients):
@@ -136,9 +136,10 @@ class Window(ctk.CTk):
             messagebox.showinfo("Show list of accounts", 'List of accounts is empty!')
 
     def show_list_accounts(self):
-        """ Виводить список рахунків"""
-        if self.bank.list_accounts:
-            list_names_column = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 80, 'власник': 300, 'баланс, грн.': 100, 'interest rate, %': 100}
+        """ Відкриває вікно списку рахунків"""
+
+        if self.bank.list_accounts.length():
+            list_names_column = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 300, 'власник': 300, 'баланс, грн.': 100, 'interest rate, %': 100}
 
             ListWindow('Список рахунків', self.__bank)
         else:

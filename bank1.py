@@ -12,6 +12,14 @@ class Bank:
         self.__list_clients = ClientBinaryTree()
         self.__list_accounts = AccountBinaryTree()
 
+    @property
+    def list_accounts(self):
+        return self.__list_accounts
+
+    @property
+    def list_clients(self):
+        return self.__list_clients
+
     def add_new_client(self, client, number_primary_account):
         pass
 
@@ -30,7 +38,7 @@ class Bank:
             clients = bank_data.get('clients')
             if clients:
                 for client in clients.values():
-                    new_client = Client(client['name'], str(uuid.uuid4()), client['primary_account'])
+                    new_client = Client(client['name'], client['client_id'], client['primary_account'])
                     # client_json = json.dumps(new_client.to_dict(), indent=4, ensure_ascii=False)
                     # print(client_json)
                     # додаємо клієнта у бінарне дерево
