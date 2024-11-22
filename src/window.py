@@ -59,7 +59,7 @@ class Window(ctk.CTk):
             if self.bank.list_clients.length() or self.bank.list_accounts.length():
                 if messagebox.askokcancel('Save to file', 'Зберегти дані?'):
                     # gm.save_to_file(self.__bank)
-                    self.__bank.save_to_file()
+                    self.__bank.save_to_file_json()
 
             self.destroy()
         # if self.bank.list_clients or self.bank.list_accounts:

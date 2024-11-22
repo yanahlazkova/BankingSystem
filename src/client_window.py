@@ -8,7 +8,7 @@ class ClientWindow(WindowCreateClient):
         super().__init__(bank)
         # self.func_update_table = func_update_table
         self.parent_window = parent
-        print('parent', type(parent).__name__)
+        # print('parent', type(parent).__name__)
         self.bank = bank
         self._current_client = self.bank.list_clients.find_by_id(client_id)
 
@@ -46,9 +46,10 @@ class ClientWindow(WindowCreateClient):
         self.text_account.configure(text='Особовий рахунок')
         self.personal_account.configure(textvariable=self.account_var)
         self.personal_account.grid(padx=10, columnspan=3)
+        self.show_frame_accounts()
 
     def on_closing(self):
-        print('closing...')
+        # print('closing...')
         if type(self.parent_window).__name__ == 'ListWindow':
             self.parent_window.update_table()
         self.destroy()
@@ -58,7 +59,7 @@ class ClientWindow(WindowCreateClient):
 
     @gm.check_all_fields_filled
     def save_data(self):
-        print('save data', self.name_client.get(), self._current_client.name)
+        # print('save data', self.name_client.get(), self._current_client.name)
         if self.name_client.get() != self._current_client.name:
             self._current_client.name = self.name_client.get()
 

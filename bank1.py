@@ -16,16 +16,22 @@ class Bank:
     def list_accounts(self):
         return self.__list_accounts
 
+    @list_accounts.setter
+    def list_accounts(self, account):
+        self.__list_accounts.insert(account.account_number, account)
+        print("Рахунок додано в список рахунків Банку")
+
     @property
     def list_clients(self):
         return self.__list_clients
 
+    @list_clients.setter
+    def list_clients(self, client):
+        self.__list_clients.insert(client.client_id, client)
+
     @property
     def mfo_bank(self):
         return self.__mfo_bank
-
-    def add_new_client(self, client, number_primary_account):
-        pass
 
     def load_from_file(self, file_name):
         try:
@@ -62,8 +68,8 @@ class Bank:
                                                  account['limit_min']
                                                  )
                     self.__list_accounts.insert(new_account.account_number, new_account)
-            self.__list_clients.print_tree()
-            self.__list_accounts.print_all()
+            # self.__list_clients.print_tree()
+            # self.__list_accounts.print_all()
         else:
             print('File is empty...')
 
@@ -114,6 +120,11 @@ class Bank:
         client.list_accounts.append(account_number)
         self.__list_accounts.insert(account_number, new_account)
         return True
+
+    def create_new_client(self, client_name, account_number):
+        new_client = Client(name=client_name, client_id=str(uuid.uuid4()), primary_account=account_number)
+        return new_client
+
 
 
     # def load_from_file(self, file_name):

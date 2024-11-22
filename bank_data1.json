@@ -58,6 +58,12 @@
                 "UA5430522920241030153701"
             ]
         },
+        "62b5639e-cad9-4f82-a3bf-7865766853f9": {
+            "client_id": "62b5639e-cad9-4f82-a3bf-7865766853f9",
+            "name": "КЛІЄНТ",
+            "primary_account": "UA8830522920241122130319",
+            "list_accounts": []
+        },
         "d2f1c8ec-8fcc-4bf1-8470-ea8d3fb9b7ee": {
             "client_id": "d2f1c8ec-8fcc-4bf1-8470-ea8d3fb9b7ee",
             "name": "ПЕТРОВ ПЕТРО ПЕТРОВИЧ",
@@ -65,6 +71,12 @@
             "list_accounts": [
                 "UA5130522920241030170743"
             ]
+        },
+        "e97db871-d219-4f78-aa59-3439f6d243fa": {
+            "client_id": "e97db871-d219-4f78-aa59-3439f6d243fa",
+            "name": "CLIENT",
+            "primary_account": "UA2430522920241122125723",
+            "list_accounts": []
         }
     }
 }

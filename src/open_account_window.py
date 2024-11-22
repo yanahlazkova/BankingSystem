@@ -177,12 +177,12 @@ class OpenAccountWindow(ctk.CTkToplevel):
             self.label_time_period.grid(row=3, column=1, padx=5, pady=10, columnspan=2, sticky='wns')
 
     def on_closing(self):
-        print('Closing')
+        # print('Closing')
         self.destroy()
 
     @gm.check_all_fields_filled
     def add_account(self):
-        print("Opening the account...")
+        # print("Opening the account...")
         # account_number = gm.generate_unique_account_number(self.__bank.mfo_bank)
         interest_rate = self.entry_interest_rate.get()
         limit_min = None

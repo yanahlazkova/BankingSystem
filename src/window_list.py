@@ -15,9 +15,9 @@ class ListWindow(ctk.CTkToplevel):
         if title == "Список рахунків":
             self.__list_columns = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 300, 'власник': 300,
                              'баланс, грн.': 100, 'interest rate, %': 100}
-            print(self.__bank.list_accounts.print_all())
+            # print(self.__bank.list_accounts.print_all())
             self.list_length = self.__bank.list_accounts.length()
-            print(self.list_length)
+            # print(self.list_length)
         elif title == "Список клієнтів":
             self.__list_columns = {'№п/п': 50, 'id клієнта': 300, 'ФІО': 300, 'осн.рахунок': 200}
             self.list_length = self.__bank.list_clients.length()
@@ -106,7 +106,7 @@ class ListWindow(ctk.CTkToplevel):
         if self.__title == "Список рахунків":
             self.number_table_row = self.__bank.list_accounts.length()
             list_accounts = self.__bank.list_accounts.get_list()
-            print(f'list accounts: {list_accounts}')
+            # print(f'list accounts: {list_accounts}')
             for index, account in enumerate(list_accounts):
                 current_client = self.__bank.list_clients.find_by_id(account['client_id'])
                 table.append({
@@ -169,7 +169,7 @@ class ListWindow(ctk.CTkToplevel):
 
         self.geometry(f'{self.winfo_width()}x{window_height}')
         self.frame_list_accounts.configure(height=table_height)
-        print('висота таблиці:', table_height)
+        # print('висота таблиці:', table_height)
         self.create_table_column_names()
 
         self.create_table()
