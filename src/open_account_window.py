@@ -184,17 +184,23 @@ class OpenAccountWindow(ctk.CTkToplevel):
     def add_account(self):
         print("Opening the account...")
         # account_number = gm.generate_unique_account_number(self.__bank.mfo_bank)
-        data_new_account = None
+        interest_rate = self.entry_interest_rate.get()
+        limit_min = None
+        interest_on_loan = None
+        time_period = None
         match self.selected_type_account:
-            case 'savings':
-                data_new_account = (self.entry_interest_rate.get(),
-                                    self.entry_limit_min.get())
-            case 'credit':
-                data_new_account = (self.entry_interest_rate.get(),
-                                    self.entry_interest_on_loan.get())
-            case 'deposit':
-                data_new_account = (self.entry_interest_rate.get(),
-                                    self.entry_time_period.get())
-        self.__bank.create_new_account(self.selected_type_account, self.client, data_new_account)
+            case 'savings': limit_min = self.entry_limit_min.get()
+            case 'credit': interest_on_loan = self.entry_interest_on_loan.get()
+            case 'deposit': time_period = self.entry_time_period.get()
 
-        self.destroy()
+        create_account = self.__bank.create_new_account(self.selected_type_account,
+                                                        self.client,
+                                                        interest_rate,
+                                                        limit_min,
+                                                        interest_on_loan,
+                                                        time_period)
+        if create_account:
+            # print(f"open account {self.client}")
+            self.destroy()
+        else:
+            print("Помилка при створенні рахунку")

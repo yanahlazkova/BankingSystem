@@ -55,8 +55,8 @@ class Bank:
             accounts = bank_data.get('accounts')
             if accounts:
                 for account in accounts.values():
-                    new_account = SavingsAccount(account['client_id'],
-                                                 account['account_number'],
+                    new_account = SavingsAccount(account['account_number'],
+                                                 account['client_id'],
                                                  account['balance'],
                                                  account['interest_rate'],
                                                  account['limit_min']
@@ -80,19 +80,40 @@ class Bank:
         except Exception as e:
             print('Ошибка записи в файл: ', e)
 
-    def create_new_account(self, type_account, client, data_account):
-        print(data_account)
+    def create_new_account(self, type_account, client, interest_rate=None, limit_min=None, interest_on_loan=None, time_period=None):
         account_number = gm.generate_unique_account_number(self.mfo_bank)
-        new_account = None
+        # new_account = None
+
         match type_account:
             case 'savings':
-                new_account = SavingsAccount(account_number, client.client_id, balance=0, **data_account)
+                new_account = SavingsAccount(account_number=account_number,
+                                             owner_id=client.client_id,
+                                             balance=0,
+                                             interest_rate=interest_rate,
+                                             limit_min=limit_min)
+                print(f"Added account {new_account.to_dict()}")
+
             case 'credit':
-                new_account = CreditAccount(account_number, client.client_id, balance=0, **data_account)
+                new_account = CreditAccount(account_number=account_number,
+                                            owner_id=client.client_id,
+                                            balance=0,
+                                            interest_rate=interest_rate,
+                                            interest_on_loan=interest_on_loan)
+                print(f"Added account {new_account.to_dict()}")
+
             case 'deposit':
-                new_account = DepositAccount(account_number, client.client_id, balance=0, **data_account)
+                new_account = DepositAccount(account_number=account_number,
+                                             owner_id=client.client_id,
+                                             balance=0,
+                                             interest_rate=interest_rate,
+                                             time_period=time_period)
+                print(f"Added account {new_account.to_dict()}")
 
 
+        # self.__list_clients.add_account_to_list(client.client_id, account_number)
+        client.list_accounts.append(account_number)
+        self.__list_accounts.insert(account_number, new_account)
+        return True
 
 
     # def load_from_file(self, file_name):

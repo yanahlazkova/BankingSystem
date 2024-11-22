@@ -106,6 +106,7 @@ class ListWindow(ctk.CTkToplevel):
         if self.__title == "Список рахунків":
             self.number_table_row = self.__bank.list_accounts.length()
             list_accounts = self.__bank.list_accounts.get_list()
+            print(f'list accounts: {list_accounts}')
             for index, account in enumerate(list_accounts):
                 current_client = self.__bank.list_clients.find_by_id(account['client_id'])
                 table.append({

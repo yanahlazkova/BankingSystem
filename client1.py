@@ -87,12 +87,12 @@ class ClientBinaryTree:
         else:
             return self.__find_by_id(node.right, key)
 
-    def add_account_to_list(self, key, number_account):
-        current_node: Client = self.find_by_id(key)
-        if current_node:
-            current_node.list_accounts.append(number_account)
-        else:
-            print(f'Client id-{key} not fount')
+    # def add_account_to_list(self, key, number_account):
+    #     current_node: Client = self.find_by_id(key)
+    #     if current_node:
+    #         current_node.list_accounts.append(number_account)
+    #     else:
+    #         print(f'Client id-{key} not fount')
 
     def print_tree(self, node=None):
         if node is None:

@@ -61,7 +61,7 @@ class SavingsAccount(BankAccount):
     __type = 'savings'
 
     def __init__(self, account_number, owner_id, balance, interest_rate=__interest_rate, limit_min=__limit_min):
-        super().__init__(owner_id, account_number, balance, interest_rate)
+        super().__init__(account_number=account_number, owner_id=owner_id, balance=balance)
         self.__limit_min = limit_min
         self.__fixed_interest_rate = interest_rate
 
@@ -106,24 +106,41 @@ class CreditAccount(BankAccount):
     __type = 'credit'
 
     def __init__(self, account_number, owner_id, balance, interest_rate, interest_on_loan):
-        super().__init__(account_number, owner_id)
+        super().__init__(account_number=account_number, owner_id=owner_id, balance=balance)
         self.__interest_rate = interest_rate
         self.__interest_on_loan = interest_on_loan  # відсоток по кредиту
+        self.__type = 'credit'
 
     def to_dict(self):
-        pass
+        return {
+            'account_number': self.account_number,
+            'client_id': self.owner_id,
+            'balance': self.balance,
+            'interest_rate': self.__interest_rate,
+            'interest_on_loan': self.__interest_on_loan,
+            'type': self.__type
+        }
+
 
 class DepositAccount(BankAccount):
     __type = 'deposit'
     __time_period = 1
 
     def __init__(self, account_number, owner_id, balance, interest_rate, time_period=__time_period):
-        super().__init__(account_number, owner_id, balance)
+        super().__init__(account_number=account_number, owner_id=owner_id, balance=balance)
         self.__interest_rate = interest_rate
         self.__fixed_time_period = time_period
+        self.__type = 'deposit'
 
     def to_dict(self):
-        pass
+        return {
+            'account_number': self.account_number,
+            'client_id': self.owner_id,
+            'balance': self.balance,
+            'interest_rate': self.__interest_rate,
+            'time_period': self.__fixed_time_period,
+            'type': self.__type
+        }
 
 
 class AccountNode:
