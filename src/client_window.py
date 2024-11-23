@@ -19,7 +19,8 @@ class ClientWindow(WindowCreateClient):
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         # Вікно клієнта
-        self.text_new_client.configure(text=f'{self._current_client.name}\t(id-{self._current_client.client_id})')
+        self.text_new_client.configure(text=f'ID-{self._current_client.client_id}', text_color='white')
+        # Робимо можливість скопіювати ID клієнта при кліку
         self.text_generate_account.configure(text="Рахунки клієнта:")
 
         # Ім'я клієнта та основний рахунок

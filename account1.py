@@ -54,6 +54,7 @@ class BankAccount:
     def type(self):
         return self.__type
 
+
 class SavingsAccount(BankAccount):
     """ ощадний рахунок """
     __interest_rate = 5

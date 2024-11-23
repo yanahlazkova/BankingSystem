@@ -86,7 +86,10 @@ class Bank:
         except Exception as e:
             print('Ошибка записи в файл: ', e)
 
-    def create_new_account(self, type_account, client, interest_rate=None, limit_min=None, interest_on_loan=None, time_period=None):
+    def create_new_account(self, type_account, client, interest_rate=None,
+                           limit_min=None,
+                           interest_on_loan=None,
+                           time_period=None):
         account_number = gm.generate_unique_account_number(self.mfo_bank)
         # new_account = None
 

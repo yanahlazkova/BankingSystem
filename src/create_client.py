@@ -17,6 +17,7 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.title("Banking System / Creating a new client...")
 
         self._current_client = None
+        self._current_account = None
 
         self.__padx = self.__pady = 10
 
@@ -36,6 +37,9 @@ class WindowCreateClient(ctk.CTkToplevel):
 
         self.text_new_client = ctk.CTkLabel(self.frame_general, text_color='gray', text="Додавання нового клієнта",
                                             font=ctk.CTkFont(size=16))
+        # копіювання id-клієнта при подвійному кліку
+        self.text_new_client.bind("<Double-Button-1>", self.copy_id)
+
         self.text_new_client.grid(row=0, padx=self.__padx, pady=self.__pady, sticky='nsew')
 
         # Дані клієнта
@@ -103,16 +107,24 @@ class WindowCreateClient(ctk.CTkToplevel):
         # self.limit_min.grid(row=2, column=1, padx=self.__padx, pady=self.__pady, sticky='w')
         # self.text_UAH.grid(row=2, column=2, padx=self.__padx, pady=self.__pady, sticky='e')
 
-
         # Frame рахунку клієнта
         self.frame_accounts = ctk.CTkFrame(self, corner_radius=5, border_width=1, border_color='green')
+
         self.accounts_label = ctk.CTkLabel(self.frame_accounts, text_color='gray',text="Рахунки клієнта")
+
         values = ['Ощадні', 'Кредитні', 'Депозитні']
-        self.accounts_seg_batton = ctk.CTkSegmentedButton(self.frame_accounts, values=values,
-                                                          command=self.clicker)
+        self.accounts_seg_button = ctk.CTkSegmentedButton(self.frame_accounts, values=values,
+                                                          command=self.selected_type_account)
+        self.accounts_seg_button.set(values[0])
         self.combo_list_account = []
-        combo_var = ctk.StringVar(self._current_client.primary_account)
-        self.accounts_combo = ctk.CTkComboBox(self.frame_accounts)
+        self.accounts_combo = ctk.CTkComboBox(self.frame_accounts, values=self.combo_list_account,
+                                              command=self.selected_account)
+        self.account_textbox = ctk.CTkTextbox(self.frame_accounts,
+                                              border_color='gray',
+                                              text_color='gray',
+                                              height=80,
+                                              )
+
         self.show_frame_accounts()
 
         # Фрейм з кнопками Зберегти та закрити
@@ -138,24 +150,60 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.button_reset.grid(row=0, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
 
     def show_frame_accounts(self):
+        # TODO: випавити вивод рахунків у списку
         if self._current_client:
             self.frame_accounts.grid(row=3, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
             self.frame_accounts.grid_columnconfigure(0, weight=1)
             self.accounts_label.grid(row=0, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
-            self.accounts_seg_batton.grid(row=1, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
-
+            # SegmentedButton
+            self.accounts_seg_button.grid(row=1, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
+            # ComboBox
             self.combo_list_account = self._current_client.list_accounts
             self.combo_list_account.append(self._current_client.primary_account)
             self.accounts_combo.configure(values=self.combo_list_account)
             self.accounts_combo.set(self.combo_list_account[0])
+            self.accounts_combo.bind("<Key>", self.prevent_editing)  # Запрещаем ввод текста
+            # Восстановление значения при потере фокуса
+            self.accounts_combo.bind("<FocusOut>",
+                                     lambda e: self.accounts_combo.set(self.accounts_combo.get()))
             self.accounts_combo.grid(row=2, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
+            # TextBox
+            self.account_textbox.grid(row=3, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
+            self.show_data_account(self.accounts_combo.get())
 
-    def clicker(self, value):
+    def prevent_editing(self, event):
+        """ Для combobox - забороняє ввод тексту """
+        # Если текст изменяется вручную, возвращаем значение из списка
+        self.accounts_combo.set(self.accounts_combo.get())
+
+    def selected_type_account(self, value):
         """ Виводить список рахунків з обратим типом """
         print(f'Обрано {value}')
 
-    def choose_account(self):
-        pass
+    def selected_account(self, choice):
+        """ Виводить данні обраного рахунку """
+        print(f'Данні ранухнку {choice}')
+        self.show_data_account(choice)
+
+    def show_data_account(self, choice):
+        self._current_account = self.bank.list_accounts.find_account(choice)
+        self.account_textbox.insert(0.0, self._current_account)
+
+    def copy_id(self, event):
+        """ копіює ID клієнта, якщо він створений """
+        if self._current_client:
+            client_id = self._current_client.client_id  # Получаем ID клиента
+
+            # Используем Tkinter для работы с буфером обмена
+            import tkinter as tk
+            root = tk.Tk()
+            root.withdraw()  # Скрываем главное окно
+            root.clipboard_clear()  # Очищаем буфер обмена
+            root.clipboard_append(client_id)  # Копируем ID клиента в буфер
+            root.update()  # Обновляем буфер
+            root.destroy()  # Закрываем Tkinter окно
+            messagebox.showinfo("Copy ID",f'ID клієнта скопійовано\nID-{client_id}')
+
 
     @property
     def current_client(self):
@@ -177,8 +225,8 @@ class WindowCreateClient(ctk.CTkToplevel):
         """ Створення нового особового рахнутку клієнта"""
         # тут генерується рахунок і створюється новий клієнт
 
-        new_account = gm.generate_unique_account_number(self.bank.mfo_bank)
-        self.account_var.set(new_account)
+        number_account = gm.generate_unique_account_number(self.bank.mfo_bank)
+        self.account_var.set(number_account)
 
         self.button_save.configure(fg_color=['#2CC985', '#2FA572'], state='normal')
         self.button_get_account.configure(fg_color='gray', state='disabled')
@@ -190,9 +238,16 @@ class WindowCreateClient(ctk.CTkToplevel):
         client_name = self.name_client.get()
         account_number = self.personal_account.get()
         self._current_client = self.bank.create_new_client(client_name, account_number)
-        print(self._current_client)
 
+        # вивод ID клієнта
+        self.title(f'Banking system/New client ID-{self._current_client.client_id}')
+        new_text = self.text_new_client.cget('text') + f'\n(ID-{self._current_client.client_id})'
+        self.text_new_client.configure(text=new_text)
 
+        # створення рахунку
+        new_account = self.bank.create_new_account('savings', self._current_client)
+
+        self.show_frame_accounts()
 
     # @gm.check_all_fields_filled
     def reset_data(self):
