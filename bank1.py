@@ -86,9 +86,13 @@ class Bank:
         except Exception as e:
             print('Ошибка записи в файл: ', e)
 
-    def create_new_account(self, type_account, client, interest_rate=None, limit_min=None, interest_on_loan=None, time_period=None):
-        account_number = gm.generate_unique_account_number(self.mfo_bank)
-        # new_account = None
+    def create_new_account(self, type_account, client, interest_rate=None,
+                           limit_min=None,
+                           interest_on_loan=None,
+                           time_period=None,
+                           account_number=None) -> BankAccount:
+        account_number = (account_number if account_number else gm.generate_unique_account_number(self.mfo_bank))
+        new_account = None
 
         match type_account:
             case 'savings':
@@ -119,7 +123,45 @@ class Bank:
         # self.__list_clients.add_account_to_list(client.client_id, account_number)
         client.list_accounts.append(account_number)
         self.__list_accounts.insert(account_number, new_account)
-        return True
+        return new_account
+
+    def create_savings_account(self, account_number, client_id,
+                               balance=0,
+                               interest_rate=None,
+                               limit_min=None):
+        """ відкритя ощадного рахунку """
+
+        new_account = SavingsAccount(account_number=account_number,
+                                     owner_id=client_id,
+                                     balance=0,
+                                     interest_rate=interest_rate,
+                                     limit_min=limit_min)
+        print(f"Added account {new_account.to_dict()}")
+        return new_account
+
+    def create_credit_account(self, account_number,
+                              client_id,
+                              balance=0,
+                              interest_rate=None,
+                              interest_on_loan=None):
+        new_account = CreditAccount(account_number=account_number,
+                                    owner_id=client_id,
+                                    balance=balance,
+                                    interest_rate=interest_rate,
+                                    interest_on_loan=interest_on_loan)
+        return new_account
+
+    def create_deposit_account(self, account_number, client_id,
+                               owner_id,
+                               balance=0,
+                               interest_rate=None,
+                               time_period=None):
+        new_account = DepositAccount(account_number=account_number,
+                                     owner_id=client_id,
+                                     balance=balance,
+                                     interest_rate=interest_rate,
+                                     time_period=time_period)
+        return new_account
 
     def create_new_client(self, client_name, account_number):
         new_client = Client(name=client_name, client_id=str(uuid.uuid4()), primary_account=account_number)

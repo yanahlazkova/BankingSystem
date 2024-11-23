@@ -54,6 +54,7 @@ class BankAccount:
     def type(self):
         return self.__type
 
+
 class SavingsAccount(BankAccount):
     """ ощадний рахунок """
     __interest_rate = 5
@@ -111,6 +112,13 @@ class CreditAccount(BankAccount):
         self.__interest_on_loan = interest_on_loan  # відсоток по кредиту
         self.__type = 'credit'
 
+    def __repr__(self):
+        return (f'\nAccount number {self.account_number}:'
+                f'\n\tClient ID-{self.owner_id}'
+                f'\n\tBalance:\t{self.balance}'
+                f'\n\tInterest rate:\t{self.__interest_rate}'
+                f'\n\tinterest_on_loan:\t{self.__interest_on_loan}')
+
     def to_dict(self):
         return {
             'account_number': self.account_number,
@@ -132,13 +140,20 @@ class DepositAccount(BankAccount):
         self.__fixed_time_period = time_period
         self.__type = 'deposit'
 
+    def __repr__(self):
+        return (f'\nAccount number {self.account_number}:'
+                f'\n\tClient ID-{self.owner_id}'
+                f'\n\tBalance:\t{self.balance}'
+                f'\n\tInterest rate:\t{self.__interest_rate}'
+                f'\n\tfixed_time_period:\t{self.__fixed_time_period}')
+
     def to_dict(self):
         return {
             'account_number': self.account_number,
             'client_id': self.owner_id,
             'balance': self.balance,
             'interest_rate': self.__interest_rate,
-            'time_period': self.__fixed_time_period,
+            'fixed_time_period': self.__fixed_time_period,
             'type': self.__type
         }
 
