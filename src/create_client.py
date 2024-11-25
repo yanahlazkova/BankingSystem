@@ -54,7 +54,9 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.frame_data_client.grid_columnconfigure(3, weight=1)
 
         # ПІБ клієнта та особовий рахунок
-        self.text_data_clien = ctk.CTkLabel(self.frame_data_client, text_color='gray', text='Дані клієнта')
+        self.text_data_clien = ctk.CTkLabel(self.frame_data_client, text_color='gray',
+                                            font=ctk.CTkFont(size=14),
+                                            text='Дані клієнта')
         self.name_var = ctk.StringVar()
         self.name_client = ctk.CTkEntry(self.frame_data_client,
                                         text_color='grey',
@@ -62,7 +64,7 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.name_client.bind("<KeyRelease>", self.force_uppercase)
 
         self.text_data_clien.grid(row=0, column=0, pady=self.__pady, padx=self.__padx, columnspan=4, sticky="nsew")
-        self.name_client.grid(row=1, column=0, padx=self.__padx, pady=self.__pady, columnspan=4, sticky="nsew")
+        self.name_client.grid(row=1, column=0, padx=self.__padx, pady=0, columnspan=4, sticky="nsew")
 
         self.list_required_fields.append([self.name_client, "\"ПІБ клієнта\""])
 
@@ -90,8 +92,7 @@ class WindowCreateClient(ctk.CTkToplevel):
 
         self.frame_generate_account.grid_columnconfigure(0, weight=1)
 
-        self.text_generate_account = ctk.CTkLabel(self.frame_generate_account, text_color='gray',
-                                                  text="Створення рахунку")
+
 
         self.button_open_account = ctk.CTkButton(self.frame_generate_account,
                                                  text="Open new account",
@@ -102,7 +103,6 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.button_open_account.grid(row=0, column=0, padx=10, pady=10, columnspan=3)
 
 
-        self.text_generate_account.grid(row=0, column=0, padx=self.__padx, pady=self.__pady, columnspan=4, sticky='nsew')
         # self.text_interest_rate.grid(row=1, column=0, padx=self.__padx, pady=self.__pady, sticky='w')
         # self.interest_rate.grid(row=1, column=1, padx=self.__padx, pady=self.__pady, sticky='w')
         # self.text_limit_min.grid(row=2, column=0, padx=self.__padx, pady=self.__pady, sticky='w')
@@ -112,7 +112,9 @@ class WindowCreateClient(ctk.CTkToplevel):
         # Frame рахунку клієнта
         self.frame_accounts = ctk.CTkFrame(self, corner_radius=5, border_width=1, border_color='green')
 
-        self.accounts_label = ctk.CTkLabel(self.frame_accounts, text_color='gray',text="Рахунки клієнта")
+        self.accounts_label = ctk.CTkLabel(self.frame_accounts, text_color='gray',
+                                           font=ctk.CTkFont(size=14),
+                                           text="Рахунки клієнта")
 
         values = ['Ощадні', 'Кредитні', 'Депозитні']
         self.accounts_seg_button = ctk.CTkSegmentedButton(self.frame_accounts, values=values,
@@ -152,14 +154,13 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.button_reset.grid(row=0, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
 
     def show_frame_accounts(self):
-        # TODO: виправити вивод рахунків у списку
-        print(f'List clident accounts: {self.list_accounts}')
+        # print(f'List client accounts: {self.list_accounts}')
         if self._current_client:
             self.frame_accounts.grid(row=3, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
             self.frame_accounts.grid_columnconfigure(0, weight=1)
-            self.accounts_label.grid(row=0, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
+            self.accounts_label.grid(row=0, column=0, padx=self.__padx, pady=5, sticky="nsew")
             # SegmentedButton
-            self.accounts_seg_button.grid(row=1, column=0, padx=self.__padx, pady=self.__pady, sticky="nsew")
+            self.accounts_seg_button.grid(row=1, column=0, padx=self.__padx, pady=0, sticky="nsew")
             # ComboBox
             self.combo_list_accounts = [account.account_number for account in self.list_accounts]
             self.accounts_combo.configure(values=self.combo_list_accounts)
@@ -188,9 +189,7 @@ class WindowCreateClient(ctk.CTkToplevel):
         self.show_data_account(choice)
 
     def show_data_account(self, choice):
-        # TODO: найти индекс в списке с указанным номером счета,
         data_account = next((account for account in self.list_accounts if account.account_number == choice), None)
-        print(data_account, data_account.type)
         self.account_textbox.delete(0.0, 'end')
         if data_account.type == 'savings':
             self.account_textbox.insert(0.10, f'\nAccount "{data_account.type}"'
@@ -292,15 +291,18 @@ class WindowCreateClient(ctk.CTkToplevel):
         if self._current_client:
             self._current_client.name = self.name_client.get()
             self.bank.list_clients = self._current_client
-            # TODO: перевірити додавання рахунків в Банк
-            self.bank.list_accounts = (account for account in self.list_accounts)
-            if messagebox.askokcancel('Saving',
+            # додавання рахунків в Банк
+            for account in self.list_accounts:
+                self.bank.list_accounts = account
+            print(self.bank.list_accounts)
+            if messagebox.askokcancel('Saving...',
                                       message="Дані збережені\nДодати наступного клієнта?"):
-                self.reset_data()
+                # self.reset_data()
+                self.destroy()
+                WindowCreateClient(self.bank)
             else:
                 self.destroy()
-                from src.client_window import ClientWindow
-                ClientWindow(self, self.bank, self._current_client.client_id)
+
 
     @gm.check_all_fields_filled
     def open_new_account(self):

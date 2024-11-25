@@ -1,82 +1,77 @@
 class BankAccount:
-    __type = 'main'
+    # __type = 'main'
 
     # Список полів, доступних для виводу списку рахунків
 
     def __init__(self, owner_id, account_number, balance=0, interest_rate=1):
         # власник рахунку
-        self.__owner_id = owner_id
+        self.owner_id = owner_id
         # номер рахунку (унікальний)
-        self.__account_number = account_number
+        self.account_number = account_number
         # баланс
-        self.__balance = balance
+        self.balance = balance
         # відсоткова ставка
-        self.__interest_rate = interest_rate
+        self.interest_rate = interest_rate
 
     def to_dict(self):
         return {
-            'account_number': self.__account_number,
-            'balance': self.__balance,
-            # 'owner': self.__owner.client_id,
-            'interest_rate': self.__interest_rate,
-            'type': self.__type
+            'account_number': self.account_number,
+            'balance': self.balance,
+            # 'owner': self.owner.client_id,
+            'interest_rate': self.interest_rate,
         }
 
-    @property
-    def owner_id(self):
-        return self.__owner_id
-
-    @owner_id.setter
-    def owner_id(self, new_client):
-        self.__owner = new_client
-
-    @property
-    def account_number(self):
-        return self.__account_number
-
-    @property
-    def balance(self):
-        return self.__balance
-
-    @balance.setter
-    def balance(self, amount):
-        self.__balance = amount
-
-    @property
-    def interest_rate(self):
-        return self.__interest_rate
-
-    @interest_rate.setter
-    def interest_rate(self, interest_rate):
-        self.__interest_rate = interest_rate
-
-    @property
-    def type(self):
-        return self.__type
+    # @property
+    # def owner_id(self):
+    #     return self.owner_id
+    #
+    # @owner_id.setter
+    # def owner_id(self, new_client):
+    #     self.owner = new_client
+    #
+    # @property
+    # def account_number(self):
+    #     return self.account_number
+    #
+    # @property
+    # def balance(self):
+    #     return self.balance
+    #
+    # @balance.setter
+    # def balance(self, amount):
+    #     self.balance = amount
+    #
+    # @property
+    # def interest_rate(self):
+    #     return self.interest_rate
+    #
+    # @interest_rate.setter
+    # def interest_rate(self, interest_rate):
+    #     self.interest_rate = interest_rate
 
 
 class SavingsAccount(BankAccount):
     """ ощадний рахунок """
     __interest_rate = 5
     __limit_min = 100
-    __type = 'savings'
 
     def __init__(self, account_number, owner_id, balance, interest_rate=__interest_rate, limit_min=__limit_min):
         super().__init__(account_number=account_number, owner_id=owner_id, balance=balance)
-        self.__limit_min = limit_min
-        self.__fixed_interest_rate = interest_rate
+        self.limit_min = limit_min
+        self.fixed_interest_rate = interest_rate
+        self.type = 'savings'
 
-    @property
-    def fixed_interest_rate(self):
-        return self.__interest_rate
+    # @property
+    # def fixed_interest_rate(self):
+    #     return self.interest_rate
+    #
+    # @property
+    # def limit_min(self):
+    #     return self.limit_min
 
-    @property
-    def limit_min(self):
-        return self.__limit_min
-
-    @property
-    def type(self):
-        return self.__type
+    # @property
+    # def type(self):
+    #     return self.type
 
     def __eq__(self, other):
         return (self.owner_id == other.owner_id
@@ -97,36 +92,35 @@ class SavingsAccount(BankAccount):
             'account_number': self.account_number,
             'client_id': self.owner_id,
             'balance': self.balance,
-            'limit_min': self.__limit_min,
-            'interest_rate': self.__fixed_interest_rate,
-            'type': self.__type
+            'limit_min': self.limit_min,
+            'interest_rate': self.fixed_interest_rate,
+            'type': self.type
         }
 
 
 class CreditAccount(BankAccount):
-    __type = 'credit'
 
     def __init__(self, account_number, owner_id, balance, interest_rate, interest_on_loan):
         super().__init__(account_number=account_number, owner_id=owner_id, balance=balance)
-        self.__interest_rate = interest_rate
-        self.__interest_on_loan = interest_on_loan  # відсоток по кредиту
-        self.__type = 'credit'
+        self.interest_rate = interest_rate
+        self.interest_on_loan = interest_on_loan  # відсоток по кредиту
+        self.type = 'credit'
 
     def __repr__(self):
         return (f'\nAccount number {self.account_number}:'
                 f'\n\tClient ID-{self.owner_id}'
                 f'\n\tBalance:\t{self.balance}'
-                f'\n\tInterest rate:\t{self.__interest_rate}'
-                f'\n\tinterest_on_loan:\t{self.__interest_on_loan}')
+                f'\n\tInterest rate:\t{self.interest_rate}'
+                f'\n\tinterest_on_loan:\t{self.interest_on_loan}')
 
     def to_dict(self):
         return {
             'account_number': self.account_number,
             'client_id': self.owner_id,
             'balance': self.balance,
-            'interest_rate': self.__interest_rate,
-            'interest_on_loan': self.__interest_on_loan,
-            'type': self.__type
+            'interest_rate': self.interest_rate,
+            'interest_on_loan': self.interest_on_loan,
+            'type': self.type
         }
 
 
@@ -136,25 +130,25 @@ class DepositAccount(BankAccount):
 
     def __init__(self, account_number, owner_id, balance, interest_rate, time_period=__time_period):
         super().__init__(account_number=account_number, owner_id=owner_id, balance=balance)
-        self.__interest_rate = interest_rate
-        self.__fixed_time_period = time_period
-        self.__type = 'deposit'
+        self.interest_rate = interest_rate
+        self.fixed_time_period = time_period
+        self.type = 'deposit'
 
     def __repr__(self):
         return (f'\nAccount number {self.account_number}:'
                 f'\n\tClient ID-{self.owner_id}'
                 f'\n\tBalance:\t{self.balance}'
-                f'\n\tInterest rate:\t{self.__interest_rate}'
-                f'\n\tfixed_time_period:\t{self.__fixed_time_period}')
+                f'\n\tInterest rate:\t{self.interest_rate}'
+                f'\n\tfixed_time_period:\t{self.fixed_time_period}')
 
     def to_dict(self):
         return {
             'account_number': self.account_number,
             'client_id': self.owner_id,
             'balance': self.balance,
-            'interest_rate': self.__interest_rate,
-            'fixed_time_period': self.__fixed_time_period,
-            'type': self.__type
+            'interest_rate': self.interest_rate,
+            'fixed_time_period': self.fixed_time_period,
+            'type': self.type
         }
 
 

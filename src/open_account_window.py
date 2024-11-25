@@ -212,9 +212,12 @@ class OpenAccountWindow(ctk.CTkToplevel):
                                                              time_period=self.entry_time_period.get())
 
         if new_account:
-            # print(f"open account {self.client}")
+            # додавання рахунку у список рахунку клієнта
+            self.client.list_accounts = account_number
             self.parent.list_accounts.append(new_account)
             self.parent.show_frame_accounts()
+            self.parent.button_save.configure(state='normal')
+
             self.destroy()
         else:
             print("Помилка при створенні рахунку")
