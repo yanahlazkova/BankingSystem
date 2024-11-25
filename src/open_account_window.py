@@ -5,11 +5,13 @@ import general_methods as gm
 class OpenAccountWindow(ctk.CTkToplevel):
     list_required_fields = []
 
-    def __init__(self, client, func_open_new_account, func_generate_number_account):
+    def __init__(self, parent, client, bank):
         super().__init__()
-        self.func_generate_number_account = func_generate_number_account
-        self.func_open_new_account = func_open_new_account
+        self.parent = parent
         self.client = client
+        self.__bank = bank
+        # self.func_generate_number_account = gm.generate_unique_account_number(bank.mfo_bank)
+        # self.func_open_new_account = bank.create_new_account()
         # поля, обов'язкові для заповнення
         self.list_required_fields = []
         self.selected_type_account = 0
@@ -176,24 +178,44 @@ class OpenAccountWindow(ctk.CTkToplevel):
             self.label_time_period.grid(row=3, column=1, padx=5, pady=10, columnspan=2, sticky='wns')
 
     def on_closing(self):
-        print('Closing')
+        # print('Closing')
         self.destroy()
 
     @gm.check_all_fields_filled
     def add_account(self):
-        print("Opening the account...")
-        account_number = self.func_generate_number_account()
-        data_new_account = None
+        # print("Opening the account...")
+        new_account = None
+        account_number = gm.generate_unique_account_number(self.__bank.mfo_bank)
+        interest_rate = self.entry_interest_rate.get()
+        limit_min = None
+        interest_on_loan = None
+        time_period = None
         match self.selected_type_account:
             case 'savings':
-                data_new_account = (self.entry_interest_rate.get(),
-                                    self.entry_limit_min.get())
+                new_account = self.__bank.create_savings_account(account_number=account_number,
+                                                                 client_id=self.client.client_id,
+                                                                 balance=0,
+                                                                 interest_rate=interest_rate,
+                                                                 limit_min=self.entry_limit_min.get())
             case 'credit':
-                data_new_account = (self.entry_interest_rate.get(),
-                                    self.entry_interest_on_loan.get())
+                new_account = self.__bank.create_credit_account(account_number=account_number,
+                                                                client_id=self.client.client_id,
+                                                                balance=0,
+                                                                interest_rate=interest_rate,
+                                                                interest_on_loan=self.entry_interest_on_loan.get())
             case 'deposit':
-                data_new_account = (self.entry_interest_rate.get(),
-                                    self.entry_time_period.get())
-        self.func_open_new_account(account_number, self.selected_type_account, self.client, data_new_account)
+                new_account = self.__bank.create_new_account(self.selected_type_account,
+                                                             self.client,
+                                                             interest_rate=interest_rate,
+                                                             limit_min=limit_min,
+                                                             interest_on_loan=interest_on_loan,
+                                                             time_period=self.entry_time_period.get())
 
-        self.destroy()
+        if new_account:
+            # print(f"open account {self.client}")
+            self.parent.list_accounts.append(new_account)
+            self.parent.show_frame_accounts()
+            self.destroy()
+        else:
+            print("Помилка при створенні рахунку")
+

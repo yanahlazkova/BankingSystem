@@ -13,12 +13,14 @@ class ListWindow(ctk.CTkToplevel):
         self.__bank = bank
 
         if title == "Список рахунків":
-            self.__list_columns = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 80, 'власник': 300,
+            self.__list_columns = {'№п/п': 50, '№ рахунку': 200, 'тип': 80, 'id клієнта': 300, 'власник': 300,
                              'баланс, грн.': 100, 'interest rate, %': 100}
-            self.list_length = len(self.__bank.list_accounts)
+            # print(self.__bank.list_accounts.print_all())
+            self.list_length = self.__bank.list_accounts.length()
+            # print(self.list_length)
         elif title == "Список клієнтів":
-            self.__list_columns = {'№п/п': 50, 'id клієнта': 100, 'ФІО': 300, 'осн.рахунок': 200}
-            self.list_length = len(self.__bank.list_clients)
+            self.__list_columns = {'№п/п': 50, 'id клієнта': 300, 'ФІО': 300, 'осн.рахунок': 200}
+            self.list_length = self.__bank.list_clients.length()
 
         self.__padx = self.__pady = 5
         self.__title = title
@@ -73,8 +75,6 @@ class ListWindow(ctk.CTkToplevel):
 
         # gm.center_window(self, width_window, height_window)
 
-
-
     def get_table_height(self):
         number_table_row = (self.number_row if self.list_length >= self.number_row else self.list_length)
         table_height = ((28 + self.__padx*2) * number_table_row)
@@ -104,25 +104,28 @@ class ListWindow(ctk.CTkToplevel):
     def create_table(self):
         table = []
         if self.__title == "Список рахунків":
-            self.number_table_row = self.__bank.list_accounts
-            for index, account in enumerate(self.__bank.list_accounts):
-                # print(f'{index + 1}. {account.account_number}')
+            self.number_table_row = self.__bank.list_accounts.length()
+            list_accounts = self.__bank.list_accounts.get_list()
+            # print(f'list accounts: {list_accounts}')
+            for index, account in enumerate(list_accounts):
+                current_client = self.__bank.list_clients.find_by_id(account['client_id'])
                 table.append({
-                    '№ рахунку': account.account_number,
-                    'тип': account.type,
-                    'id клієнта': account.owner.client_id,
-                    'власник': account.owner.name,
-                    'баланс': account.balance,
-                    'interest rate': account.interest_rate
+                    '№ рахунку': account['account_number'],
+                    'тип': account['type'],
+                    'id клієнта': account['client_id'],
+                    'власник': current_client.name,
+                    'баланс': account['balance'],
+                    'interest rate': account['interest_rate']
                 })
         elif self.__title == "Список клієнтів":
-            self.number_table_row = self.__bank.list_clients
-            for index, client in enumerate(self.__bank.list_clients):
+            self.number_table_row = self.__bank.list_clients.length()
+            list_clients = self.__bank.list_clients.get_list()
+            for index, client in enumerate(list_clients):
                 # print(f'{index + 1}. {client.client_id} - {client.name} - ')
                 table.append({
-                    'id клієнта': client.client_id,
-                    'ПІБ': client.name,
-                    'осн.рахунок': client.primary_account.account_number
+                    'id клієнта': client['client_id'],
+                    'ПІБ': client['name'],
+                    'осн.рахунок': client['primary_account']
                 })
 
         *list_column, = (self.__list_columns[column] for column in self.__list_columns)
@@ -137,7 +140,6 @@ class ListWindow(ctk.CTkToplevel):
             for j, value in enumerate(row):
                 if j == 0:
                     id_client = row['id клієнта']
-                # id_client = row['id клієнта']
                 row_table_var = ctk.StringVar()
                 row_table_var.set(row[value])
                 row_table = ctk.CTkEntry(self.frame_list_accounts, textvariable=row_table_var,
@@ -150,24 +152,24 @@ class ListWindow(ctk.CTkToplevel):
                 # print(f'{value}: {row[value]}')
 
     def open_client_window(self, id_client):
-        client = gm.find_client_in_list(id_client, self.__bank.list_clients)
+        # client = gm.find_client_in_list(id_client, self.__bank.list_clients)
         # open window data of client
-        ClientWindow(self, self.__bank, client)
+        ClientWindow(self, self.__bank, id_client)
 
     def update_table(self):
         for widget in self.frame_list_accounts.winfo_children():
             widget.destroy()
         if self.__title == "Список клієнтів":
-            self.list_length = len(self.__bank.list_clients)
+            self.list_length = self.__bank.list_clients.length()
         elif self.__title == "Список рахунків":
-            self.list_length = len(self.__bank.list_accounts)
+            self.list_length = self.__bank.list_accounts.length()
 
         table_height = self.get_table_height()
         window_height = self.get_window_height(table_height)
 
         self.geometry(f'{self.winfo_width()}x{window_height}')
         self.frame_list_accounts.configure(height=table_height)
-        print('висота таблиці:', table_height)
+        # print('висота таблиці:', table_height)
         self.create_table_column_names()
 
         self.create_table()

@@ -35,7 +35,7 @@
     ],
     "clients": [
         {
-            "client_id": "500-1",
+            "client_id": "fccc1637-fc2f-43ff-aca3-fc211f18d92e",
             "name": "AGERGRRE",
             "primary_account": "UA8430522920241026090709",
             "list_accounts": [
@@ -43,13 +43,13 @@
                     "account_number": "UA8430522920241026090709",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "savings",
-                    "limit_min": 100
+                    "limit_min": 100,
+                    "type": "savings"
                 }
             ]
         },
         {
-            "client_id": "500-2",
+            "client_id": "f7c75a69-768e-4558-8075-67d21e66c2dd",
             "name": "HRHDTRH",
             "primary_account": "UA9230522920241026090715",
             "list_accounts": [
@@ -57,36 +57,36 @@
                     "account_number": "UA9230522920241026090715",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "savings",
-                    "limit_min": 100
+                    "limit_min": 100,
+                    "type": "savings"
                 }
             ]
         },
         {
-            "client_id": "500-3",
-            "name": "\u0406\u0412\u0410\u041d\u041e\u0412 \u0406\u0412\u0410\u041d \u0406\u0412\u0410\u041d\u041e\u0412\u0418\u0427",
+            "client_id": "1ac72dbd-4a00-40b8-ab08-bcd00a9d178d",
+            "name": "ІВАНОВ ІВАН ІВАНОВИЧ",
             "primary_account": "UA5430522920241030153701",
             "list_accounts": [
                 {
                     "account_number": "UA5430522920241030153701",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "savings",
-                    "limit_min": 100
+                    "limit_min": 100,
+                    "type": "savings"
                 }
             ]
         },
         {
-            "client_id": "500-4",
-            "name": "\u041f\u0415\u0422\u0420\u041e\u0412 \u041f\u0415\u0422\u0420\u041e \u041f\u0415\u0422\u0420\u041e\u0412\u0418\u0427",
+            "client_id": "4ccd7f8d-90df-4390-97a0-7bd17a6e10b0",
+            "name": "ПЕТРОВ ПЕТРО ПЕТРОВИЧ",
             "primary_account": "UA5130522920241030170743",
             "list_accounts": [
                 {
                     "account_number": "UA5130522920241030170743",
                     "balance": 0,
                     "interest_rate": 1,
-                    "type": "main",
-                    "limit_min": 100
+                    "limit_min": 100,
+                    "type": "savings"
                 }
             ]
         }

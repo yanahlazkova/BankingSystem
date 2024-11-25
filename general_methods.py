@@ -56,9 +56,9 @@ def save_to_file(bank):
 
 
 
-def find_client_in_list(id_client, list_clients: list):
-    client = next((client for client in list_clients if client.client_id == id_client), None)
-    return client
+# def find_client_in_list(id_client, list_clients: list):
+#     client = next((client for client in list_clients if client.client_id == id_client), None)
+#     return client
 
 
 def find_account_in_list(type_account, list_account: list):
@@ -78,3 +78,6 @@ def load_from_file_json():
         print('File does not exist' )
         return {}
 
+def data_setting_list_window(type_window):
+    # if type_window == ''
+    pass
